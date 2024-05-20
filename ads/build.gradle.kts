@@ -17,7 +17,7 @@ configure<PublishingExtension> {
         groupId = "com.alexxxey.dev"
         artifactId = "ads-everywhere"
         version = "1.0.0"
-        artifact("$buildDir/outputs/aar/${artifactId}-release.aar")
+        artifact("$buildDir/outputs/aar/ads-release.aar")
 
         pom.withXml {
             val dependenciesNode = asNode().appendNode("dependencies")
@@ -42,7 +42,7 @@ configure<PublishingExtension> {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/alexxxey-dev/offerwall")
+            url = uri("https://maven.pkg.github.com/alexxxey-dev/ads-everywhere")
             credentials {
                 username = githubProperties["gpr.usr"] as String
                 password = githubProperties["gpr.key"] as String

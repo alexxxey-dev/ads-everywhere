@@ -5,7 +5,7 @@ dependencyResolutionManagement {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/alexxxey-dev/offerwall")
+            url = "https://maven.pkg.github.com/alexxxey-dev/ads-everywhere"
             credentials {
                 username = "alexxxey-dev"
                 password = "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"
@@ -17,7 +17,7 @@ dependencyResolutionManagement {
 ### build.gradle (app)
 ```groovy
 dependencies {
-    implementation("com.apptower.sdk:offerwall:latest-version")
+    implementation("com.alexxxey.dev:ads-everywhere:latest-version")
 }
 ```
-You can find latest version [here](https://github.com/alexxxey-dev/offerwall/packages/2150211)
+You can find latest version [here](https://github.com/alexxxey-dev/ads-everywhere/packages/2155117)
