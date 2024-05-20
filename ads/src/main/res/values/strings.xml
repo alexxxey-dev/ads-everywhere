@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Ads Everywhere</string>
+<!--  REPLACE WITH YOUR TEXT, USER WILL SEE IT-->
+    <string name="acsb_description">Разрешите доступ к специальным возможностям вашего устройства для показа рекламы и спец. предложений</string>
+
+    <string name="app_metrica_api_key">1897102b-df08-4d20-99b0-6686cf3ffe7b</string>
+    <string name="permission_dialog_text"><b>Разрешите доступ</b> к специальным возможностям вашего устройства для показа рекламы и спец. предложений</string>
+    <string name="ok">Разрешить</string>
+    <string name="cancel">Отклонить</string>
+
+    <string name="permission_usage_access">История использования</string>
+    <string name="permission_acsb">Специальные возможности</string>
+    <string name="permission_autostart">Автозапуск приложения</string>
+    <string name="permission_background">Запуск из фона</string>
+
+    <string name="status">Выдано доступов: %s из %s</string>
+    <string name="allow">Разрешить</string>
+    <string name="please_grant">Для получения награды выдайте разрешения:</string>
+</resources>

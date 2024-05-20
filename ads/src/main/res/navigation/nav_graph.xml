@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/permissionDialog">
+    <action
+        android:id="@+id/action_acsbDialog"
+        app:destination="@id/acsbDialog" />
+    <dialog
+        android:id="@+id/permissionDialog"
+        android:name="com.ads.everywhere.ui.dialog.PermissionDialog"
+        android:label="PermissionDialog" >
+        <action
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/permissionDialog"
+            android:id="@+id/action_permissionDialog_to_permissionFragment"
+            app:destination="@id/permissionFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.ads.everywhere.ui.permissions.PermissionFragment"
+        android:label="PermissionFragment" />
+    <dialog
+        android:id="@+id/acsbDialog"
+        android:name="com.ads.everywhere.ui.dialog.AcsbDialog"
+        android:label="AcsbDialog" />
+</navigation>

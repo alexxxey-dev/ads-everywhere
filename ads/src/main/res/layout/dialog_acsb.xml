@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/shape_white_24"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="Как выдать разрешение:\n2 простых шага"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/acsb_guide"
+        android:adjustViewBounds="true"/>
+
+
+
+    <Button
+        android:id="@+id/allow"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        style="@style/MyButton"
+        android:textSize="20sp"
+        android:layout_marginBottom="16dp"
+        android:text="Разрешить"/>
+
+</LinearLayout>
