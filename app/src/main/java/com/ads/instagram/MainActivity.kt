@@ -1,11 +1,12 @@
 package com.ads.instagram
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.ads.everywhere.AdsEverywhere
+import com.ads.everywhere.data.models.InterstitialType
+import com.ads.everywhere.ui.UnityPlayerActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         val ads = AdsEverywhere(this)
         ads.init()
+
 
         ads.onRewardScreen()
         findViewById<View>(R.id.grant).setOnClickListener {

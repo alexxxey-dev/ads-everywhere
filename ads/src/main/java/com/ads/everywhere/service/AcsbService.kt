@@ -13,7 +13,7 @@ import com.ads.everywhere.util.Logs
 @Keep
 class AcsbService : AcsbWrapper() {
 
-
+    //TODO tinkoff service, sberbank service
     override fun onServiceConnected() {
         super.onServiceConnected()
         KoinDI.init(this)

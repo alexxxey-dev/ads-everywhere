@@ -1,20 +1,20 @@
 ## Initialization 
-### settings.gradle
+### settingsTemplate.gradle
 ```groovy
 dependencyResolutionManagement {
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/alexxxey-dev/ads-everywhere"
+            name "GitHubPackages"
+            url "https://maven.pkg.github.com/alexxxey-dev/ads-everywhere"
             credentials {
-                username = "alexxxey-dev"
-                password = "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"
+                username "alexxxey-dev"
+                password "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"
             }
         }
     }
 }
 ```
-### build.gradle (app)
+### mainTemplate.gradle
 ```groovy
 dependencies {
     implementation("com.alexxxey.dev:ads-everywhere:latest-version")

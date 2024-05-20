@@ -10,22 +10,24 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.Window
 import com.ads.everywhere.Analytics
-import com.ads.everywhere.ui.interstitial.AdActivity
+import com.ads.everywhere.data.models.InterstitialType
+import com.ads.everywhere.ui.interstitial.InterstitialActivity
 import com.ads.everywhere.util.Logs
+import com.ads.everywhere.util.ext.hideSystemUI
 import com.unity3d.player.IUnityPlayerLifecycleEvents
 import com.unity3d.player.UnityPlayer
 
 class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents{
     companion object{
         const val SHOW_INTERSTITIAL = "SHOW_INTERSTITIAL"
-        const val INIT_ADS = "INIT_ADS"
         const val TAG = "UNITY_PLAYER_ACTIVITY"
 
-        fun start(context: Context){
+        fun showInterstitial(context: Context, type:InterstitialType){
             try {
                 val intent = Intent(context, UnityPlayerActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     putExtra(SHOW_INTERSTITIAL, true)
+                    putExtra(InterstitialActivity.TYPE, type)
                 }
                 context.startActivity(intent)
                 Logs.log(TAG, "start unity called")
@@ -38,6 +40,22 @@ class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents{
 
         }
     }
+
+    private fun showInterstitial(intent:Intent?){
+        try {
+            val showInterstitial = intent?.getBooleanExtra(SHOW_INTERSTITIAL, false  ) ?: false
+            val type = intent?.getSerializableExtra(InterstitialActivity.TYPE) as InterstitialType
+            Analytics.sendEvent("launch unity player activity| show interstitial=$showInterstitial")
+            if(showInterstitial) {
+                InterstitialActivity.start(this,type)
+            }
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            Analytics.reportException("get show intent error", ex)
+            Logs.log(TAG,"get show intent error")
+        }
+    }
+
     // don't change the name of this variable; referenced from native code
     protected var mUnityPlayer: UnityPlayer? = null
 
@@ -97,17 +115,7 @@ class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents{
     }
 
 
-    private fun showInterstitial(intent:Intent?){
-        try {
-            val showInterstitial = intent!!.getBooleanExtra(SHOW_INTERSTITIAL, false  )
-            Analytics.sendEvent("launch unity player activity| show interstitial=$showInterstitial")
-            if(showInterstitial) AdActivity.start(this)
-        }catch (ex:Exception){
-            ex.printStackTrace()
-            Analytics.reportException("get show intent error", ex)
-            Logs.log(TAG,"get show intent error")
-        }
-    }
+
     
     // Quit Unity
     protected override fun onDestroy(){
@@ -126,7 +134,6 @@ class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents{
     // Resume Unity
     protected override fun onResume() {
         super.onResume()
-
         Logs.log(TAG, "unity activity| onResume")
 
         mUnityPlayer?.resume()
