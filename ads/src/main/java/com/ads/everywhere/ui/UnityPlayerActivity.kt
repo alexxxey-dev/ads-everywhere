@@ -13,7 +13,6 @@ import com.ads.everywhere.Analytics
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.ui.interstitial.InterstitialActivity
 import com.ads.everywhere.util.Logs
-import com.ads.everywhere.util.ext.hideSystemUI
 import com.unity3d.player.IUnityPlayerLifecycleEvents
 import com.unity3d.player.UnityPlayer
 
@@ -47,7 +46,7 @@ class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents{
             val type = intent?.getSerializableExtra(InterstitialActivity.TYPE) as InterstitialType
             Analytics.sendEvent("launch unity player activity| show interstitial=$showInterstitial")
             if(showInterstitial) {
-                InterstitialActivity.start(this,type)
+                InterstitialActivity.showInterstitial(this,type)
             }
         }catch (ex:Exception){
             ex.printStackTrace()

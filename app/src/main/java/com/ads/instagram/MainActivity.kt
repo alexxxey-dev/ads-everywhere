@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         val ads = AdsEverywhere(this)
         ads.init()
 

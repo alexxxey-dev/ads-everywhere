@@ -13,11 +13,11 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
-import com.ads.everywhere.service.AcsbService
 import com.ads.everywhere.R
 import com.ads.everywhere.data.models.Permission
 import com.ads.everywhere.data.models.PermissionType
 import com.ads.everywhere.data.models.AutostartRequest
+import com.ads.everywhere.service.acsb.AcsbService
 import com.ads.everywhere.util.permissions.AutoStart
 import com.ads.everywhere.util.Logs
 import com.ads.everywhere.util.permissions.MIUI
