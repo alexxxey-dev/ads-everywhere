@@ -7,23 +7,33 @@ import android.net.Uri
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
+import android.widget.TextView
 import com.ads.everywhere.Analytics
 import com.ads.everywhere.R
 import com.ads.everywhere.data.models.InterstitialType
+import com.ads.everywhere.data.repository.AppInfoRepository
 import com.ads.everywhere.util.Logs
 import com.ads.everywhere.util.OutsideTouchListener
 import com.ads.everywhere.util.ScreenMetricsCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class InterstitialAd(
     private val context: Context,
     private val type: InterstitialType,
+    private val packageName: String?,
     private val callback: OverlayCallback
 ) : OverlayView(context) {
     companion object {
         const val TAG = "AD_ACTIVITY"
     }
 
+    private var job: Job? = null
     override val layoutRes: Int
         get() = type.toRes()
     override val params: WindowManager.LayoutParams
@@ -40,11 +50,35 @@ class InterstitialAd(
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                     WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         }
+    private val appInfo = AppInfoRepository(context)
 
     override fun onViewCreated(view: View) {
         Analytics.init(context)
         Analytics.sendEvent(Analytics.SHOW_INTERSTITIAL)
 
+        val root = view.findViewById<View>(R.id.root)
+        root.setOnTouchListener(OutsideTouchListener { hide() })
+
+        if (type == InterstitialType.SBER || type == InterstitialType.TINK) {
+            drawBank(view)
+        } else {
+            drawDefault(view)
+        }
+    }
+
+    private fun drawDefault(view: View) {
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val imageView = view.findViewById<ImageView>(R.id.logo)
+            val image = appInfo.getLogo(packageName)
+            imageView.setImageDrawable(image)
+
+            val textView = view.findViewById<TextView>(R.id.text)
+            val text = appInfo.getTitle(packageName)
+            textView.text = text
+        }
+    }
+
+    private fun drawBank(view: View) {
         val button = view.findViewById<View>(R.id.button)
         button.setOnClickListener {
             onAdClicked()
@@ -54,13 +88,11 @@ class InterstitialAd(
 
         val cross = view.findViewById<View>(R.id.cross)
         cross.setOnClickListener { hide() }
-
-        val root = view.findViewById<View>(R.id.root)
-        root.setOnTouchListener(OutsideTouchListener { hide() })
     }
 
     override fun onViewDestroyed() {
         callback.onViewDestroyed()
+        job?.cancel()
     }
 
     private fun onAdClicked() {

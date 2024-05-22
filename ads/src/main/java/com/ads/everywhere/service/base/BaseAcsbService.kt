@@ -1,4 +1,4 @@
-package com.ads.everywhere.service.acsb
+package com.ads.everywhere.service.base
 
 import android.accessibilityservice.AccessibilityService
 import android.content.ComponentName
@@ -7,7 +7,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.ads.everywhere.Analytics
 
-abstract class AcsbWrapper : AccessibilityService(){
+abstract class BaseAcsbService : AccessibilityService(){
     var pn: String? = null
         private set
 

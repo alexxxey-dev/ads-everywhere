@@ -4,7 +4,6 @@ import android.app.AppOpsManager
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import com.ads.everywhere.Analytics
-import com.ads.everywhere.service.InstagramService
 import com.ads.everywhere.data.repository.InstagramRepository
 import com.ads.everywhere.util.permissions.MIUI
 import com.ads.everywhere.data.repository.PermissionsRepository
@@ -26,32 +25,28 @@ object KoinDI {
 
     lateinit var koinApp: KoinApplication
 
-    private val util = module{
+    private val util = module {
         single { androidContext().applicationContext.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager }
-        single {  androidContext().getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager }
-        single { PrefsUtil(androidContext())}
-        single {  MIUI(androidContext(), get()) }
+        single { androidContext().getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager }
+        single { PrefsUtil(androidContext()) }
+        single { MIUI(androidContext(), get()) }
         single { AutoStart() }
-        single {  Analytics(get(), get(), get()) }
+        single { Analytics(get(), get(), get()) }
     }
-
 
     private val repositories = module {
-        single { InstagramRepository()}
+        single { InstagramRepository() }
         single { PrefsRepository(get()) }
         single { UsageRepository(get(), androidContext()) }
-        single {  PermissionsRepository(get(), androidContext(), get(),get(),get()) }
+        single { PermissionsRepository(get(), androidContext(), get(), get(), get()) }
     }
 
-    private val viewModels = module{
-        viewModel { PermissionViewModel(get(),get(),get()) }
+    private val viewModels = module {
+        viewModel { PermissionViewModel(get(), get(), get()) }
     }
 
-
-
-
-    fun init(context:Context){
-        if(isInitialized()) return
+    fun init(context: Context) {
+        if (isInitialized()) return
         Logs.log(TAG, "initialize koin")
         koinApp = koinApplication {
             androidContext(context.applicationContext)
@@ -59,10 +54,6 @@ object KoinDI {
         }
     }
 
-
     fun isInitialized() = KoinDI::koinApp.isInitialized
-
-
-
 
 }

@@ -1,4 +1,4 @@
-package com.ads.everywhere.service.bank
+package com.ads.everywhere.service.base
 
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
@@ -6,9 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.PowerManager
-import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import com.ads.everywhere.data.models.BankState
+import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.models.ScreenState
 import com.ads.everywhere.ui.overlay.InterstitialAd
@@ -16,10 +15,10 @@ import com.ads.everywhere.ui.overlay.OverlayCallback
 import com.ads.everywhere.util.Logs
 
 
-abstract class BankService(private val context: Context) {
+abstract class BaseIntService(private val context: Context) {
     abstract val interstitialType: InterstitialType
-    abstract val bankPn: String
-    abstract fun isMainScreen(root: AccessibilityNodeInfo?): Boolean
+    abstract fun updateAppState(newPackage: String?)
+    abstract fun canShowAd(root: AccessibilityNodeInfo?): Boolean
 
     companion object {
         const val SHOW_FREQ = 2
@@ -30,8 +29,6 @@ abstract class BankService(private val context: Context) {
     private val keyguard = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
     private val power = context.getSystemService(Context.POWER_SERVICE) as PowerManager
     private val prefs = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
-
-    private var bankState = BankState.CLOSE
 
     private var screenState = ScreenState.UNLOCKED
     private var unlockTime: Long = 0
@@ -61,6 +58,7 @@ abstract class BankService(private val context: Context) {
         })
     }
 
+
     fun onDestroy() {
         context.unregisterReceiver(screenListener)
     }
@@ -69,23 +67,57 @@ abstract class BankService(private val context: Context) {
         if (!isValidPn(pn)) return
         if (isScreenLocked()) return
 
-        updateStatus(pn)
+        updateAppState(pn)
+        val appState = getAppState(pn)
+        log("app state = $appState ($pn)")
 
-        when (bankState) {
-            BankState.OPEN -> {
-                if (canShowAd(root)) {
-                    hideAd()
-                    showAd()
-                }
-            }
-
-            BankState.CLOSE -> {
-                hideAd()
-            }
-
-            else -> {}
+        if (appState == AppState.OPEN && canShowAd(root)) {
+            hideAd()
+            showAd(pn)
+            setAppState(pn, AppState.SHOW_AD)
         }
 
+        if (appState == AppState.CLOSE) {
+            hideAd()
+        }
+    }
+
+    fun log(msg: String) {
+        when (interstitialType) {
+            InterstitialType.TINK -> {
+                Logs.log("${TAG}_TINK", msg)
+            }
+
+            InterstitialType.SBER -> {
+                Logs.log("${TAG}_SBER", msg)
+            }
+
+            InterstitialType.DEFAULT -> {
+                Logs.log("${TAG}_EVERYWHERE", msg)
+            }
+        }
+    }
+
+    fun getAppState(appPackage: String?):AppState{
+        if(appPackage==null) return AppState.CLOSE
+        val int = prefs.getInt("app_state_$appPackage", -1)
+        if(int==-1) return AppState.CLOSE
+        return AppState.fromInt(int)
+    }
+
+    fun setAppState(appPackage: String?, state: AppState){
+        if(appPackage==null) return
+        prefs.edit().putInt("app_state_$appPackage",state.toInt()).apply()
+    }
+
+    fun getLaunchCount(appPackage: String): Int {
+        return prefs.getInt("launch_count_$appPackage", 0)
+    }
+
+    fun incLaunchCount(appPackage: String?) {
+        if(appPackage==null) return
+        val count = getLaunchCount(appPackage) + 1
+        prefs.edit().putInt("launch_count_$appPackage", count).apply()
     }
 
     private fun isValidPn(pn: String?): Boolean {
@@ -95,7 +127,6 @@ abstract class BankService(private val context: Context) {
                 && pn != "android"
     }
 
-
     private fun isScreenLocked(): Boolean {
         if (!power.isInteractive) return true
         if (keyguard.isKeyguardLocked) return true
@@ -104,59 +135,22 @@ abstract class BankService(private val context: Context) {
         return false
     }
 
-    private fun updateStatus(pn: String?) {
-        if (pn != bankPn) {
-            log("package = $pn")
-            bankState = BankState.CLOSE
-            return
-        }
-
-        if (bankState == BankState.CLOSE && pn == bankPn) {
-            bankState = BankState.OPEN
-            setLaunchCount(getLaunchCount() + 1)
-        }
-    }
-
-    private fun canShowAd(root: AccessibilityNodeInfo?): Boolean {
-        val count = getLaunchCount()
-        log("count = $count")
-        if (count % SHOW_FREQ != 0) return false
-
-        val main = isMainScreen(root)
-        log("main = $main")
-        return isMainScreen(root)
-    }
-
-    private fun showAd() {
-
-
-        ad = InterstitialAd(context, interstitialType, object : OverlayCallback {
-            override fun onViewDestroyed() {
-                ad = null
-            }
-        })
+    private fun showAd(pn: String?) {
+        ad = InterstitialAd(
+            context,
+            interstitialType,
+            pn,
+            object : OverlayCallback {
+                override fun onViewDestroyed() {
+                    ad = null
+                }
+            })
         ad?.show()
-        bankState = BankState.SHOW
     }
 
-    private fun hideAd(){
+    private fun hideAd() {
         ad?.hide()
         ad = null
-    }
-    private fun log(msg: String) {
-        if (interstitialType == InterstitialType.TINK) {
-            Logs.log("${TAG}_TINK", msg)
-        } else if (interstitialType == InterstitialType.SBER) {
-            Logs.log("${TAG}_SBER", msg)
-        }
-    }
-
-    private fun getLaunchCount(): Int {
-        return prefs.getInt("launch_count_$bankPn", 0)
-    }
-
-    private fun setLaunchCount(count: Int) {
-        prefs.edit().putInt("launch_count_$bankPn", count).apply()
     }
 
 }

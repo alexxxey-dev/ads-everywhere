@@ -17,7 +17,7 @@ import com.ads.everywhere.R
 import com.ads.everywhere.data.models.Permission
 import com.ads.everywhere.data.models.PermissionType
 import com.ads.everywhere.data.models.AutostartRequest
-import com.ads.everywhere.service.acsb.AcsbService
+import com.ads.everywhere.service.AcsbService
 import com.ads.everywhere.util.permissions.AutoStart
 import com.ads.everywhere.util.Logs
 import com.ads.everywhere.util.permissions.MIUI
@@ -78,10 +78,7 @@ class PermissionsRepository(
         )
     }
 
-
-
     private fun usageStatsEnabled(): Boolean {
-
         val mode = appOps.checkOpNoThrow(
             AppOpsManager.OPSTR_GET_USAGE_STATS,
             Process.myUid(), context.packageName
@@ -114,14 +111,9 @@ class PermissionsRepository(
         }
     }
 
-
-
-
-
     private fun autostartAvailable(): Boolean {
         return autostart.autoStartBruteforce(context, open = false, newTask = false)
     }
-
 
     private fun batteryEnabled() = (context.getSystemService(Context.POWER_SERVICE) as PowerManager)
         .isIgnoringBatteryOptimizations(context.packageName)
