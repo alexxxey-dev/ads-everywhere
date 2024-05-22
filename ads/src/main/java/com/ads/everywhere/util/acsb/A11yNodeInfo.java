@@ -244,7 +244,6 @@ public class A11yNodeInfo implements Iterable<A11yNodeInfo>, Comparator<A11yNode
      * @return The string representing the spoken text.
      */
     public String getSpeakableText() {
-        //Todo: Use Eyes Free project???  Or make this more advanced.
         if (getContentDescription() != null) return getContentDescriptionAsString();
         if (getText() != null) return getTextAsString();
         return "";

@@ -7,8 +7,8 @@ enum class InterstitialType {
 
     fun toRes(): Int {
         return when (this) {
-            SBER -> R.drawable.banner_sber
-            TINK -> R.drawable.banner_tink
+            SBER -> R.layout.interstitial_sber
+            TINK -> R.layout.interstitial_tink
         }
     }
 

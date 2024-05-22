@@ -94,10 +94,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
 
 
-    //noinspection GradlePath
-    //implementation(files(project.property('UNITY_PATH')))
-    //TODO compileOnly
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     //analytics
     implementation("io.appmetrica.analytics:analytics:6.2.1")

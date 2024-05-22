@@ -17,7 +17,7 @@ class AdsEverywhere(private val context: Context)  {
     companion object {
         const val TAG = "ADS_EVERYWHERE"
         //TODO hide on release
-        var SHOW_LOGS = true
+        var SHOW_LOGS = false
     }
 
 

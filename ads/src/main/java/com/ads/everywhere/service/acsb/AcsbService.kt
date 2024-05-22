@@ -12,7 +12,7 @@ import com.ads.everywhere.service.acsb.AcsbWrapper
 @Keep
 class AcsbService : AcsbWrapper() {
     private lateinit var tinkoff: TinkoffService
-    private lateinit var sber:SberService
+    private lateinit var sber: SberService
 
 
     override fun onServiceConnected() {
@@ -25,8 +25,8 @@ class AcsbService : AcsbWrapper() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         super.onAccessibilityEvent(event)
-        tinkoff.onAccessibilityEvent(event, getRoot(),pn)
-        sber.onAccessibilityEvent(event, getRoot(),pn)
+        tinkoff.onAccessibilityEvent(getRoot(), pn)
+        sber.onAccessibilityEvent(getRoot(), pn)
     }
 
     override fun onDestroy() {
@@ -37,7 +37,7 @@ class AcsbService : AcsbWrapper() {
 
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
-        if(tinkoff.ad != null || sber.ad !=null){
+        if (tinkoff.ad != null || sber.ad != null) {
             return true
         }
 

@@ -32,14 +32,10 @@ object KoinDI {
         single { PrefsUtil(androidContext())}
         single {  MIUI(androidContext(), get()) }
         single { AutoStart() }
+        single {  Analytics(get(), get(), get()) }
     }
 
-    private val controllers = module{
-        single {  Analytics(get(), get(), get()) }
-//        single { InstagramService(get(),get(),get()) }
-//        single { OverlayController() }
-//        single { InterstitialService() }
-    }
+
     private val repositories = module {
         single { InstagramRepository()}
         single { PrefsRepository(get()) }
@@ -59,7 +55,7 @@ object KoinDI {
         Logs.log(TAG, "initialize koin")
         koinApp = koinApplication {
             androidContext(context.applicationContext)
-            modules(util, controllers, repositories, viewModels)
+            modules(util, repositories, viewModels)
         }
     }
 

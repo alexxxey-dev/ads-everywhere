@@ -30,7 +30,6 @@ class Analytics(
         const val GRANT_ALL_PERMISSIONS = "GRANT_ALL_PERMISSIONS"
         const val GRANT_SOME_PERMISSIONS = "GRANT_SOME_PERMISSIONS"
         const val REVOKE_PERMISSION = "REVOKE_PERMISSION"
-        //TODO send this events
         const val SHOW_INTERSTITIAL = "ADS_INTERSTITIAL_VIEW"
         const val CLICK_INTERSTITIAL = "CLICK_INTERSTITIAL"
 

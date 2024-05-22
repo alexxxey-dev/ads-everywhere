@@ -65,14 +65,27 @@ abstract class BankService(private val context: Context) {
         context.unregisterReceiver(screenListener)
     }
 
-    fun onAccessibilityEvent(event: AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
+    fun onAccessibilityEvent(root: AccessibilityNodeInfo?, pn: String?) {
         if (!isValidPn(pn)) return
-        if (!isValidEvent(event)) return
         if (isScreenLocked()) return
 
         updateStatus(pn)
 
-        if (canShowAd(root)) showAd()
+        when (bankState) {
+            BankState.OPEN -> {
+                if (canShowAd(root)) {
+                    hideAd()
+                    showAd()
+                }
+            }
+
+            BankState.CLOSE -> {
+                hideAd()
+            }
+
+            else -> {}
+        }
+
     }
 
     private fun isValidPn(pn: String?): Boolean {
@@ -82,10 +95,6 @@ abstract class BankService(private val context: Context) {
                 && pn != "android"
     }
 
-    private fun isValidEvent(event: AccessibilityEvent): Boolean {
-        return event.eventType == AccessibilityEvent.TYPE_WINDOWS_CHANGED
-                || event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-    }
 
     private fun isScreenLocked(): Boolean {
         if (!power.isInteractive) return true
@@ -109,9 +118,6 @@ abstract class BankService(private val context: Context) {
     }
 
     private fun canShowAd(root: AccessibilityNodeInfo?): Boolean {
-        log("status = $bankState")
-        if (bankState != BankState.OPEN) return false
-
         val count = getLaunchCount()
         log("count = $count")
         if (count % SHOW_FREQ != 0) return false
@@ -119,12 +125,11 @@ abstract class BankService(private val context: Context) {
         val main = isMainScreen(root)
         log("main = $main")
         return isMainScreen(root)
-
     }
 
     private fun showAd() {
-        ad?.hide()
-        ad = null
+
+
         ad = InterstitialAd(context, interstitialType, object : OverlayCallback {
             override fun onViewDestroyed() {
                 ad = null
@@ -134,6 +139,10 @@ abstract class BankService(private val context: Context) {
         bankState = BankState.SHOW
     }
 
+    private fun hideAd(){
+        ad?.hide()
+        ad = null
+    }
     private fun log(msg: String) {
         if (interstitialType == InterstitialType.TINK) {
             Logs.log("${TAG}_TINK", msg)

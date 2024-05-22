@@ -6,18 +6,15 @@ import android.graphics.PixelFormat
 import android.net.Uri
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup.MarginLayoutParams
 import android.view.WindowManager
-import android.widget.ImageView
 import com.ads.everywhere.Analytics
 import com.ads.everywhere.R
 import com.ads.everywhere.data.models.InterstitialType
-import com.ads.everywhere.data.models.OverlaySize
 import com.ads.everywhere.util.Logs
+import com.ads.everywhere.util.OutsideTouchListener
 import com.ads.everywhere.util.ScreenMetricsCompat
-import com.ads.everywhere.util.ext.statusBarHeight
 
-//TODO move cross to top
+
 class InterstitialAd(
     private val context: Context,
     private val type: InterstitialType,
@@ -28,33 +25,38 @@ class InterstitialAd(
     }
 
     override val layoutRes: Int
-        get() = R.layout.ad_interstitial
-    override val size: OverlaySize
-        get() = OverlaySize(
-            ScreenMetricsCompat.screenSize(context).width,
-            ScreenMetricsCompat.screenSize(context).height,
-            0, 0
-        )
+        get() = type.toRes()
+    override val params: WindowManager.LayoutParams
+        get() = WindowManager.LayoutParams().apply {
+            width = ScreenMetricsCompat.screenSize(context).width
+            height = WindowManager.LayoutParams.WRAP_CONTENT
+            x = 0
+            y = 0
+            gravity = Gravity.CENTER
+            type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+            format = PixelFormat.TRANSPARENT
+            flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                    WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+        }
 
-    override fun onViewCreated(root: View) {
+    override fun onViewCreated(view: View) {
         Analytics.init(context)
         Analytics.sendEvent(Analytics.SHOW_INTERSTITIAL)
 
-        val banner = root.findViewById<ImageView>(R.id.banner)
-        banner.setImageResource(type.toRes())
+        val button = view.findViewById<View>(R.id.button)
+        button.setOnClickListener {
+            onAdClicked()
+            Analytics.sendEvent(Analytics.CLICK_INTERSTITIAL)
+            hide()
+        }
 
-        root.findViewById<ImageView>(R.id.banner).setOnClickListener { onAdClicked() }
-
-        val cross = root.findViewById<View>(R.id.cross)
-        val statusBar = context.statusBarHeight()
-        val dp16 = context.resources.getDimension(R.dimen.dp16).toInt()
-        (cross.layoutParams as MarginLayoutParams).setMargins(
-            0,
-            dp16,
-            dp16,
-            0
-        )
+        val cross = view.findViewById<View>(R.id.cross)
         cross.setOnClickListener { hide() }
+
+        val root = view.findViewById<View>(R.id.root)
+        root.setOnTouchListener(OutsideTouchListener { hide() })
     }
 
     override fun onViewDestroyed() {
@@ -67,8 +69,6 @@ class InterstitialAd(
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(intent)
-            Analytics.sendEvent(Analytics.CLICK_INTERSTITIAL)
-            hide()
             Logs.log(TAG, "interstitial ad| onAdClicked")
         } catch (ex: Exception) {
             ex.printStackTrace()
