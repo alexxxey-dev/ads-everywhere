@@ -11,11 +11,25 @@ import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
+import com.ads.everywhere.R
 import com.ads.everywhere.util.Logs
 import io.appmetrica.analytics.AppMetrica
 import java.util.Locale
 
+@SuppressLint("InternalInsetResource")
+fun Context.statusBarHeight(): Int = try {
+    var result = 0
+    val resourceId: Int = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        result = resources.getDimensionPixelSize(resourceId)
+    }
+    result
+}catch (ex:Exception){
+    ex.printStackTrace()
+    resources.getDimension(R.dimen.dp25).toInt()
+}
 
 
 fun getDeviceName(): String {

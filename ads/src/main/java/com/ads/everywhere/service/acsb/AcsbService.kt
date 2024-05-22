@@ -1,5 +1,6 @@
 package com.ads.everywhere.service.acsb
 
+import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
 import androidx.annotation.Keep
 import com.ads.everywhere.Analytics
@@ -28,7 +29,19 @@ class AcsbService : AcsbWrapper() {
         sber.onAccessibilityEvent(event, getRoot(),pn)
     }
 
+    override fun onDestroy() {
+        tinkoff.onDestroy()
+        sber.onDestroy()
+        super.onDestroy()
+    }
 
 
+    override fun onKeyEvent(event: KeyEvent): Boolean {
+        if(tinkoff.ad != null || sber.ad !=null){
+            return true
+        }
+
+        return super.onKeyEvent(event)
+    }
 
 }

@@ -21,19 +21,6 @@ dependencies {
 }
 ```
 You can find latest version [here](https://github.com/alexxxey-dev/ads-everywhere/packages/2155117)
-### AndroidManifest.xml
-Replace default Unity Player Activity (android:name attribute) with com.ads.everywhere.ui.UnityPlayerActivity
-```xml
- <activity android:name="com.ads.everywhere.ui.UnityPlayerActivity"
-             android:theme="@style/UnityThemeSelector"
-             android:label="@string/app_name"
-             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-```
 ## SDK Usage
 ```kotlin
 /**

@@ -33,14 +33,6 @@
         </service>
 
 
-        <activity
-            android:name=".ui.interstitial.InterstitialActivity"
-            android:screenOrientation="portrait"
-            android:exported="false"
-            android:theme="@style/InterstitialActivityTheme" />
-
-        <activity android:name=".ui.UnityPlayerActivity"
-            tools:node="merge" />
 
         <activity android:name=".ui.AdsEverywhereActivity"
             android:theme="@style/MainActivityTheme"

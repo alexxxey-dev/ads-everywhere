@@ -11,7 +11,8 @@ import android.view.accessibility.AccessibilityNodeInfo
 import com.ads.everywhere.data.models.BankState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.models.ScreenState
-import com.ads.everywhere.ui.interstitial.InterstitialActivity
+import com.ads.everywhere.ui.overlay.InterstitialAd
+import com.ads.everywhere.ui.overlay.OverlayCallback
 import com.ads.everywhere.util.Logs
 
 
@@ -35,6 +36,9 @@ abstract class BankService(private val context: Context) {
     private var screenState = ScreenState.UNLOCKED
     private var unlockTime: Long = 0
 
+    var ad: InterstitialAd? = null
+        private set
+
     private val screenListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (isInitialStickyBroadcast) return
@@ -57,13 +61,18 @@ abstract class BankService(private val context: Context) {
         })
     }
 
+    fun onDestroy() {
+        context.unregisterReceiver(screenListener)
+    }
+
     fun onAccessibilityEvent(event: AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
         if (!isValidPn(pn)) return
         if (!isValidEvent(event)) return
         if (isScreenLocked()) return
 
         updateStatus(pn)
-        showAd(root)
+
+        if (canShowAd(root)) showAd()
     }
 
     private fun isValidPn(pn: String?): Boolean {
@@ -75,7 +84,6 @@ abstract class BankService(private val context: Context) {
 
     private fun isValidEvent(event: AccessibilityEvent): Boolean {
         return event.eventType == AccessibilityEvent.TYPE_WINDOWS_CHANGED
-                || event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 || event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
     }
 
@@ -100,23 +108,31 @@ abstract class BankService(private val context: Context) {
         }
     }
 
-    private fun showAd(root: AccessibilityNodeInfo?) {
+    private fun canShowAd(root: AccessibilityNodeInfo?): Boolean {
         log("status = $bankState")
-        if (bankState != BankState.OPEN) return
+        if (bankState != BankState.OPEN) return false
 
         val count = getLaunchCount()
         log("count = $count")
-        if (count % SHOW_FREQ != 0) return
+        if (count % SHOW_FREQ != 0) return false
 
         val main = isMainScreen(root)
         log("main = $main")
-        if (!isMainScreen(root)) return
+        return isMainScreen(root)
 
-        bankState = BankState.SHOW
-        //TODO start unity activity
-        InterstitialActivity.showInterstitial(context, interstitialType)
     }
 
+    private fun showAd() {
+        ad?.hide()
+        ad = null
+        ad = InterstitialAd(context, interstitialType, object : OverlayCallback {
+            override fun onViewDestroyed() {
+                ad = null
+            }
+        })
+        ad?.show()
+        bankState = BankState.SHOW
+    }
 
     private fun log(msg: String) {
         if (interstitialType == InterstitialType.TINK) {

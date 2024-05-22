@@ -19,6 +19,7 @@ abstract class AcsbWrapper : AccessibilityService(){
         }
     }
 
+
     private fun setupExceptionHandler(){
         val uncaughtExceptionHandler: Thread.UncaughtExceptionHandler =
             Thread.UncaughtExceptionHandler { t, e ->

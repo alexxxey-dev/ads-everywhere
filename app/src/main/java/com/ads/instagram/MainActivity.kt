@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.ads.everywhere.AdsEverywhere
-import com.ads.everywhere.data.models.InterstitialType
-import com.ads.everywhere.ui.UnityPlayerActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
