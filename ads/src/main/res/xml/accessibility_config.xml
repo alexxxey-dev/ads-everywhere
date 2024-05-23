@@ -3,7 +3,6 @@
     android:description="@string/acsb_description"
     android:accessibilityEventTypes="typeAllMask"
     android:canRetrieveWindowContent="true"
-    android:canRequestFilterKeyEvents="true"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows|flagReportViewIds|flagIncludeNotImportantViews"
     />

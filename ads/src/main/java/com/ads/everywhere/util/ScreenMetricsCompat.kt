@@ -11,11 +11,10 @@ import androidx.annotation.RequiresApi
 
 object ScreenMetricsCompat {
     private val api: Api =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ApiLevel30()
-        else Api()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ApiLevel30() else Api()
 
 
-    fun screenSize(context: Context): Size  {
+    fun screenSize(context: Context): Size {
         val window = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         return api.screenSize(window)
     }
@@ -23,7 +22,7 @@ object ScreenMetricsCompat {
     @Suppress("DEPRECATION")
     private open class Api {
         open fun screenSize(window: WindowManager): Size {
-            val display =window.defaultDisplay
+            val display = window.defaultDisplay
             val metrics = if (display != null) {
                 DisplayMetrics().also { display.getRealMetrics(it) }
             } else {

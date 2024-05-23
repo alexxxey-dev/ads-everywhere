@@ -19,7 +19,7 @@
 
 
         <service
-            android:name=".service.acsb.AcsbService"
+            android:name=".data.service.AcsbService"
             android:exported="false"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
 
@@ -34,7 +34,7 @@
 
 
 
-        <activity android:name=".ui.AdsEverywhereActivity"
+        <activity android:name=".ui.MainActivity"
             android:theme="@style/MainActivityTheme"
             android:screenOrientation="portrait"/>
     </application>

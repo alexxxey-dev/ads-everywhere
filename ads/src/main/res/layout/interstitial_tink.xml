@@ -1,58 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:id="@+id/root"
-    android:background="#FEDD2C">
+    android:background="#99000000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/cross"
-        android:layout_width="41dp"
-        android:layout_height="41dp"
-        android:layout_margin="17dp"
-        android:src="@drawable/ic_cross_tink"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="23dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_header_tink"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="#FEDD2C">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="17dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_text_tink"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        <ImageView
+            android:id="@+id/cross"
+            android:layout_width="41dp"
+            android:layout_height="41dp"
+            android:layout_margin="17dp"
+            android:src="@drawable/ic_cross_tink"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="23dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/banner_tink_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="17dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/banner_tink_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
-    <ImageView
-        android:id="@+id/button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="51dp"
-        android:layout_marginEnd="39dp"
-        android:layout_marginBottom="66dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_button_tink"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:background="@drawable/shape_white_12"
+            android:layout_height="68dp"
+            android:layout_marginStart="39dp"
+            android:layout_marginTop="51dp"
+            android:layout_marginEnd="39dp"
+            android:layout_marginBottom="66dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dp"
+                android:layout_centerInParent="true"
+                android:textColor="#181419"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textSize="20sp"
+                android:text="Получить деньги"/>
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

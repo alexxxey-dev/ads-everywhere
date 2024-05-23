@@ -6,6 +6,7 @@ import com.ads.everywhere.data.models.PermissionType
 import com.ads.everywhere.data.repository.PrefsRepository
 import com.ads.everywhere.data.repository.UsageRepository
 import com.ads.everywhere.data.repository.PermissionsRepository
+import com.ads.everywhere.util.Logs
 import com.ads.everywhere.util.ext.getDeviceName
 import com.google.gson.Gson
 import io.appmetrica.analytics.AppMetrica
@@ -30,8 +31,15 @@ class Analytics(
         const val GRANT_ALL_PERMISSIONS = "GRANT_ALL_PERMISSIONS"
         const val GRANT_SOME_PERMISSIONS = "GRANT_SOME_PERMISSIONS"
         const val REVOKE_PERMISSION = "REVOKE_PERMISSION"
-        const val SHOW_INTERSTITIAL = "ADS_INTERSTITIAL_VIEW"
-        const val CLICK_INTERSTITIAL = "CLICK_INTERSTITIAL"
+
+        const val SHOW_DEFAULT_INTERSTITIAL = "SHOW_DEFAULT_INTERSTITIAL"
+        const val CLICK_DEFAULT_INTERSTITIAL = "CLICK_DEFAULT_INTERSTITIAL"
+
+        const val CLICK_TINKOFF_INTERSTITIAL = "CLICK_TINK_INTERSTITIAL"
+        const val SHOW_TINKOFF_INTERSTITIAL = "SHOW_TINK_INTERSTITIAL"
+
+        const val SHOW_SBER_INTERSTITIAL = "SHOW_SBER_INTERSTITIAL"
+        const val CLICK_SBER_INTERSTITIAL = "CLICK_SBER_INTERSTITIAL"
 
         fun init(context:Context){
             try {
@@ -41,6 +49,7 @@ class Analytics(
                     .withCrashReporting(true)
 
                 AppMetrica.activate(context, config.build())
+                Logs.log(TAG, "INIT APP METRICA")
             }catch (ex:Exception){
                 ex.printStackTrace()
             }
@@ -56,6 +65,7 @@ class Analytics(
             return try {
                 AppMetrica.reportEvent(title)
                 if (sendBuffer) AppMetrica.sendEventsBuffer()
+                Logs.log(TAG, "reportEvent = $title")
                 true
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -69,6 +79,7 @@ class Analytics(
                 val json = gson.toJson(obj)
                 AppMetrica.reportEvent(title, json)
                 if (sendBuffer) AppMetrica.sendEventsBuffer()
+                Logs.log(TAG, "reportEvent = $title")
                 true
             }catch (ex:Exception){
                 ex.printStackTrace()

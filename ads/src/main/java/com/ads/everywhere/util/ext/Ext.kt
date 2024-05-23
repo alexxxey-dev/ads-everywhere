@@ -1,22 +1,32 @@
 package com.ads.everywhere.util.ext
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
+import android.content.res.Resources
 import android.os.Build
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.WindowManager
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import com.ads.everywhere.R
-import com.ads.everywhere.util.Logs
+import com.ads.everywhere.ui.overlay.interstitial.DefaultInt
+import com.ads.everywhere.util.OnSwipeListener
 import io.appmetrica.analytics.AppMetrica
 import java.util.Locale
+
 
 @SuppressLint("InternalInsetResource")
 fun Context.statusBarHeight(): Int = try {
@@ -31,6 +41,79 @@ fun Context.statusBarHeight(): Int = try {
     resources.getDimension(R.dimen.dp25).toInt()
 }
 
+
+fun Context.navigationBarHeight():Int = try{
+    var result = 0
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        result = resources.getDimensionPixelSize(resourceId)
+    }
+    result
+}catch (ex:Exception){
+    ex.printStackTrace()
+    resources.getDimension(R.dimen.dp48).toInt()
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun View.onBottomSwipe(onBottomSwipe: () -> Unit) {
+    val swipes = object:OnSwipeListener(){
+        override fun onSwipe(direction: Direction?): Boolean {
+            if(direction==Direction.down) onBottomSwipe()
+            return super.onSwipe(direction)
+        }
+    }
+    val gesture = GestureDetector(context,
+        object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(
+                e1: MotionEvent?, e2: MotionEvent, velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                return swipes.onFling(e1, e2, velocityX, velocityY)
+            }
+        })
+
+    val listener = OnTouchListener { v, event ->
+        gesture.onTouchEvent(event)
+        return@OnTouchListener true
+    }
+    this.setOnTouchListener(listener)
+}
+
+ fun View.animateHeight(startHeight:Int, endHeight:Int, onComplete:()->Unit = {}) {
+     val root = this
+    ValueAnimator.ofInt(startHeight, endHeight).apply {
+        addUpdateListener { valueAnimator->
+            root.layoutParams = (root.layoutParams as ViewGroup.LayoutParams).apply {
+                height = (valueAnimator.getAnimatedValue() as Int)
+            }
+        }
+        addListener(object: Animator.AnimatorListener{
+            override fun onAnimationEnd(animation: Animator) {
+                onComplete()
+            }
+
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationCancel(animation: Animator) { }
+            override fun onAnimationRepeat(animation: Animator) { }
+        })
+        interpolator = AccelerateDecelerateInterpolator()
+        setDuration(DefaultInt.ANIMATION)
+        start()
+    }
+}
+
+fun View.runAfterDraw(onPreDraw:()->Unit) {
+    val view =this
+    val viewTreeObserver: ViewTreeObserver = view.getViewTreeObserver()
+    if (viewTreeObserver.isAlive) {
+        viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                onPreDraw()
+            }
+        })
+    }
+}
 
 fun getDeviceName(): String {
     val manufacturer = Build.MANUFACTURER.lowercase(Locale.getDefault())

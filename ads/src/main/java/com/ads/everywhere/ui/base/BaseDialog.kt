@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.ads.everywhere.R
-import com.ads.everywhere.di.CustomKoinComponent
+import com.ads.everywhere.data.di.CustomKoinComponent
 
 abstract class BaseDialog(private val layoutRes:Int):DialogFragment(), CustomKoinComponent {
     companion object{

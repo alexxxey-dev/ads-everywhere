@@ -4,9 +4,9 @@ package com.ads.everywhere
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.Keep
-import com.ads.everywhere.di.KoinDI
+import com.ads.everywhere.data.di.KoinDI
 import com.ads.everywhere.data.repository.PermissionsRepository
-import com.ads.everywhere.ui.AdsEverywhereActivity
+import com.ads.everywhere.ui.MainActivity
 
 
 @Keep
@@ -16,6 +16,7 @@ class AdsEverywhere(private val context: Context)  {
 
     companion object {
         const val TAG = "ADS_EVERYWHERE"
+        var SHOW_LOGS = false
     }
 
 
@@ -33,7 +34,7 @@ class AdsEverywhere(private val context: Context)  {
 
      fun requestPermissions() {
         val intent =
-            Intent(context, AdsEverywhereActivity::class.java).apply {
+            Intent(context, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }

@@ -13,8 +13,8 @@ class AppInfoRepository(private val context:Context) {
     companion object{
         const val TAG = "APP_INFO"
     }
-    suspend fun getTitle(packageName: String?): String? = withContext(Dispatchers.IO){
-        try {
+     fun getTitle(packageName: String?): String? {
+        return try {
             if (packageName.isNullOrBlank()) throw Exception("empty package name")
 
             val mInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
@@ -27,8 +27,8 @@ class AppInfoRepository(private val context:Context) {
     }
 
 
-    suspend fun getLogo(packageName: String?): Drawable? = withContext(Dispatchers.IO){
-        try {
+     fun getLogo(packageName: String?): Drawable? {
+       return try {
             if (packageName.isNullOrBlank()) throw Exception("empty package name")
 
             packageManager.getApplicationIcon(packageName)

@@ -1,18 +1,35 @@
 package com.ads.everywhere.data.models
 
+import com.ads.everywhere.Analytics
 import com.ads.everywhere.R
 
 enum class InterstitialType {
     TINK, SBER, DEFAULT;
 
-    companion object{
-        fun isDefaultPn(pn:String?):Boolean{
-            if (pn == null) return false
-            return InterstitialType.entries.all { it.toBankPackage() != pn }
+
+    fun toClickEvent():String{
+        return when(this){
+            TINK->Analytics.CLICK_TINKOFF_INTERSTITIAL
+            SBER ->Analytics.CLICK_SBER_INTERSTITIAL
+            DEFAULT->Analytics.CLICK_DEFAULT_INTERSTITIAL
         }
     }
 
-    fun toBankPackage():String?{
+    fun toShowEvent():String{
+        return when(this){
+            TINK->Analytics.SHOW_TINKOFF_INTERSTITIAL
+            SBER ->Analytics.SHOW_SBER_INTERSTITIAL
+            DEFAULT->Analytics.SHOW_DEFAULT_INTERSTITIAL
+        }
+    }
+    fun toAcsbView():String?{
+        return when(this){
+            TINK->"com.idamob.tinkoff.android:id/toolbarSearchProfile"
+            SBER ->"ru.sberbankmobile:id/marketplace_universal_entry_point"
+            else->null
+        }
+    }
+    fun toAppPackage():String?{
         return when(this){
             TINK->"com.idamob.tinkoff.android"
             SBER ->"ru.sberbankmobile"
@@ -32,7 +49,7 @@ enum class InterstitialType {
         return when (this) {
             TINK -> "https://pxl.leads.su/click/0dcfd804e48738857842c6c1d7c7e35c?source=place2&erid=LjN8K4PHN"
             SBER -> "https://pxl.leads.su/click/0dcfd804e48738857842c6c1d7c7e35c?source=place1&erid=LjN8K4PHN"
-            DEFAULT->"https://google.com"   //TODO set url
+            DEFAULT->"https://pxl.leads.su/click/0dcfd804e48738857842c6c1d7c7e35c?source=place3&erid=LjN8K4PHN"
         }
     }
 }

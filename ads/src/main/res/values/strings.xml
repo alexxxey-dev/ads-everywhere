@@ -16,4 +16,6 @@
     <string name="status">Выдано доступов: %s из %s</string>
     <string name="allow">Разрешить</string>
     <string name="please_grant">Для получения награды выдайте разрешения:</string>
+    <string name="you_are_recommended">Вам рекомендованно</string>
+    <string name="go">Перейти</string>
 </resources>
