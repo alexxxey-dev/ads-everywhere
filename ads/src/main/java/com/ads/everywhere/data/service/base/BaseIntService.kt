@@ -86,7 +86,7 @@ abstract class BaseIntService(
     private fun hideAd(pn:String?) {
         if(pn==null) return
         if(ads[pn]==null) return
-        Logs.logHide("hide from service ($pn)")
+
         ads[pn]?.hide()
         ads[pn] = null
     }

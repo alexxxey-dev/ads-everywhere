@@ -47,16 +47,13 @@ class DefaultIntOverlay(
         view.findViewById<TextView>(R.id.app_title).text = appTitle
 
         view.findViewById<View>(R.id.cross).setOnClickListener {
-            Logs.logHide("hide from cross")
             animateHide(view)
         }
         view.findViewById<View>(R.id.back).setOnClickListener {
-            Logs.logHide("hide from back")
             animateHide(view)
         }
 
         view.findViewById<View>(R.id.button).setOnClickListener {
-            Logs.logHide("hide from button click")
             animateHide(view) {
                 showUrl(type.toUrl())
                 Analytics.sendEvent(type.toClickEvent())
@@ -66,12 +63,10 @@ class DefaultIntOverlay(
 
         val banner = view.findViewById<View>(R.id.banner)
         banner.onBottomSwipe {
-            Logs.logHide("hide from swipe")
             animateHide(view)
         }
 
         view.setOnTouchListener(OutsideTouchListener {
-            Logs.logHide("hide from touch outside")
             animateHide(view)
         })
     }

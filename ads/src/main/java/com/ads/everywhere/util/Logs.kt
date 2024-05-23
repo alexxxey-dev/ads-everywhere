@@ -11,14 +11,6 @@ object Logs {
         if(!AdsEverywhere.SHOW_LOGS) return
         Log.d(tag, msg)
     }
-    //TODO remove on release
-    fun logHide(msg:String){
-        try {
-            AppMetrica.reportError("HIDE_BANNER", msg)
-            AppMetrica.sendEventsBuffer()
-        }catch (ex:Exception){
-            ex.printStackTrace()
-        }
-    }
+
 
 }
