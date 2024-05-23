@@ -6,13 +6,14 @@ import com.ads.everywhere.Analytics
 import com.ads.everywhere.R
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.ui.overlay.OverlayCallback
+import com.ads.everywhere.util.OutsideTouchListener
 
 
-class PersonalInt(
+class PersonalIntOverlay(
     private val context: Context,
     private val type: InterstitialType,
     private val callback: OverlayCallback
-) : BaseInt(context) {
+) : BaseIntOverlay(context) {
     companion object {
         const val TAG = "AD_ACTIVITY"
     }
@@ -32,6 +33,8 @@ class PersonalInt(
 
         val cross = view.findViewById<View>(R.id.cross)
         cross.setOnClickListener { hide() }
+
+        view.setOnTouchListener(OutsideTouchListener { hide() })
     }
 
 

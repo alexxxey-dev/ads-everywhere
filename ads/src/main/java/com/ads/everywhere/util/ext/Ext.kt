@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
-import android.content.res.Resources
 import android.os.Build
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -22,7 +21,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ads.everywhere.R
-import com.ads.everywhere.ui.overlay.interstitial.DefaultInt
+import com.ads.everywhere.ui.overlay.interstitial.DefaultIntOverlay
 import com.ads.everywhere.util.OnSwipeListener
 import io.appmetrica.analytics.AppMetrica
 import java.util.Locale
@@ -97,7 +96,7 @@ fun View.onBottomSwipe(onBottomSwipe: () -> Unit) {
             override fun onAnimationRepeat(animation: Animator) { }
         })
         interpolator = AccelerateDecelerateInterpolator()
-        setDuration(DefaultInt.ANIMATION)
+        setDuration(DefaultIntOverlay.ANIMATION)
         start()
     }
 }

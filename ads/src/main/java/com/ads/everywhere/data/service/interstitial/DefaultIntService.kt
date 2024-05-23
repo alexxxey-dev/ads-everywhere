@@ -6,15 +6,19 @@ import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.repository.ServiceRepository
 import com.ads.everywhere.data.service.base.BaseIntService
-import com.ads.everywhere.ui.overlay.interstitial.DefaultInt
+import com.ads.everywhere.ui.overlay.interstitial.DefaultIntOverlay
 import com.ads.everywhere.ui.overlay.OverlayCallback
 import com.ads.everywhere.util.ext.isSystemApp
+import io.appmetrica.analytics.impl.ad
 
 class DefaultIntService(
     private val context: Context,
     private val repository: ServiceRepository
 ) : BaseIntService(context, repository, InterstitialType.DEFAULT) {
-
+    companion object{
+        private const val SHOW_FREQ = 5
+        private const val PACKAGE_NAME = "default"
+    }
     private var currentPackage: String? = null
     private var prevPackage: String? = null
     private val whiteList = listOf(
@@ -41,7 +45,7 @@ class DefaultIntService(
         if (currentPackage != newPackage && isValidApp(newPackage)) {
             repository.setAppState(currentPackage, AppState.CLOSE)
             repository.setAppState(newPackage, AppState.OPEN)
-            repository.incLaunchCount(newPackage)
+            repository.incLaunchCount(PACKAGE_NAME)
         }
 
         prevPackage = currentPackage
@@ -53,19 +57,20 @@ class DefaultIntService(
         if (currentPackage == prevPackage) return false
         if (!isValidApp(currentPackage)) return false
 
-        val count = repository.getLaunchCount(currentPackage!!)
+        val count = repository.getLaunchCount(PACKAGE_NAME)
         log("count = $count ($currentPackage)")
         return count % SHOW_FREQ == 0
     }
 
     override fun showAd(pn: String?) {
+        if(pn==null) return
         val callback = object : OverlayCallback {
             override fun onViewDestroyed() {
-                ad = null
+                ads[pn] = null
             }
         }
-        ad = DefaultInt(context, pn, callback)
-        ad?.show()
+        ads[pn] = DefaultIntOverlay(context, pn, callback)
+        ads[pn]?.show()
     }
 
     private fun isValidApp(pn: String?): Boolean {

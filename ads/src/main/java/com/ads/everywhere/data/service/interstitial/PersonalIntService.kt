@@ -6,8 +6,9 @@ import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.repository.ServiceRepository
 import com.ads.everywhere.data.service.base.BaseIntService
-import com.ads.everywhere.ui.overlay.interstitial.PersonalInt
+import com.ads.everywhere.ui.overlay.interstitial.PersonalIntOverlay
 import com.ads.everywhere.ui.overlay.OverlayCallback
+import io.appmetrica.analytics.impl.ad
 
 class PersonalIntService(
     private val context: Context,
@@ -15,7 +16,9 @@ class PersonalIntService(
     private val type: InterstitialType
 ) : BaseIntService(context, repository, type) {
     private val appPackage = type.toAppPackage()
-
+    companion object{
+        private const val SHOW_FREQ = 2
+    }
     override fun canShowAd(root: AccessibilityNodeInfo?): Boolean {
         val count = repository.getLaunchCount(appPackage)
         log("count = $count ($appPackage)")
@@ -30,16 +33,16 @@ class PersonalIntService(
 
     override fun updateAppState(newPackage: String?) {
         if (newPackage != appPackage) {
-            log("set close state ($newPackage)")
+            log("set close state ($appPackage)")
             repository.setAppState(appPackage, AppState.CLOSE)
             return
         }
 
         val appState = repository.getAppState(appPackage)
-        log("old state = $appState ($appPackage)")
+        log("app state = $appState ($appPackage)")
 
-        if (repository.getAppState(appPackage) == AppState.CLOSE) {
-            log("set open state ($newPackage)")
+        if (appState == AppState.CLOSE) {
+            log("set open state ($appPackage)")
             repository.setAppState(appPackage, AppState.OPEN)
             repository.incLaunchCount(appPackage)
         }
@@ -47,15 +50,16 @@ class PersonalIntService(
 
 
     override fun showAd(pn: String?) {
-        ad = PersonalInt(
+        if(pn==null) return
+        ads[pn] = PersonalIntOverlay(
             context,
             type,
             object : OverlayCallback {
                 override fun onViewDestroyed() {
-                    ad = null
+                    ads[pn] = null
                 }
             })
-        ad?.show()
+        ads[pn]?.show()
     }
 
 

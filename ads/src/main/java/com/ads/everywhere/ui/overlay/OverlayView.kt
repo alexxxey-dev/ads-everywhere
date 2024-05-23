@@ -8,7 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams
 import com.ads.everywhere.Analytics
-import com.ads.everywhere.ui.overlay.interstitial.DefaultInt
+import com.ads.everywhere.ui.overlay.interstitial.DefaultIntOverlay
 import com.ads.everywhere.util.Logs
 import com.ads.everywhere.util.ext.safeAddView
 import com.ads.everywhere.util.ext.safeRemoveView
@@ -51,7 +51,7 @@ abstract class OverlayView(
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(intent)
-            Logs.log(DefaultInt.TAG, "interstitial ad| onAdClicked")
+            Logs.log(DefaultIntOverlay.TAG, "interstitial ad| onAdClicked")
         } catch (ex: Exception) {
             ex.printStackTrace()
             Analytics.reportException("interstitial ad| click exception", ex)

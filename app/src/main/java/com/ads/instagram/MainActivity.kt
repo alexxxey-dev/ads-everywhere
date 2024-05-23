@@ -16,8 +16,8 @@ class MainActivity : AppCompatActivity() {
 
 
         val ads = AdsEverywhere(this).apply {
-            //TODO
-            //SHOW_LOGS = true
+            //TODO hide on release
+            SHOW_LOGS = true
             init()
             onRewardScreen()
         }

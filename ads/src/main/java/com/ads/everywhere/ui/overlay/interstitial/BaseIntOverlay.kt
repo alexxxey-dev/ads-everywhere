@@ -6,9 +6,8 @@ import android.view.Gravity
 import android.view.WindowManager
 import com.ads.everywhere.ui.overlay.OverlayView
 import com.ads.everywhere.util.ScreenMetricsCompat
-import com.ads.everywhere.util.ext.statusBarHeight
 
-abstract class BaseInt(private val context: Context) : OverlayView(context) {
+abstract class BaseIntOverlay(private val context: Context) : OverlayView(context) {
     override val params = WindowManager.LayoutParams().apply {
         width = ScreenMetricsCompat.screenSize(context).width
         height = ScreenMetricsCompat.screenSize(context).height
@@ -19,6 +18,7 @@ abstract class BaseInt(private val context: Context) : OverlayView(context) {
         format = PixelFormat.TRANSPARENT
         flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
     }
 }

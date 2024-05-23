@@ -12,12 +12,9 @@ import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.models.ScreenState
 import com.ads.everywhere.data.repository.ServiceRepository
-import com.ads.everywhere.ui.overlay.OverlayView
+import com.ads.everywhere.ui.overlay.interstitial.BaseIntOverlay
 import com.ads.everywhere.util.Logs
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.appmetrica.analytics.impl.ad
 
 
 abstract class BaseIntService(
@@ -30,7 +27,6 @@ abstract class BaseIntService(
     abstract fun canShowAd(root: AccessibilityNodeInfo?): Boolean
 
     companion object {
-        const val SHOW_FREQ = 2
         const val UNLOCK_DELAY = 1000L
         const val TAG = "BANK_SERVICE"
     }
@@ -41,7 +37,7 @@ abstract class BaseIntService(
     private var screenState = ScreenState.UNLOCKED
     private var unlockTime: Long = 0
 
-    var ad: OverlayView? = null
+    val ads = HashMap<String, BaseIntOverlay?>()
 
     private val screenListener = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -66,19 +62,20 @@ abstract class BaseIntService(
     }
 
 
-    fun onAccessibilityEvent(event:AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
+    fun onAccessibilityEvent(event: AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
+        if (!isValidEvent(event)) return
         if (!isValidPn(pn)) return
         if (isScreenLocked()) return
         updateAppState(pn)
 
         val appState = repository.getAppState(pn)
         if (appState == AppState.OPEN && canShowAd(root)) {
-            hideAd()
+            hideAd(pn)
             showAd(pn)
             repository.setAppState(pn, AppState.SHOW_AD)
         }
         if (appState == AppState.CLOSE) {
-            hideAd()
+            hideAd(pn)
         }
     }
 
@@ -86,9 +83,12 @@ abstract class BaseIntService(
         context.unregisterReceiver(screenListener)
     }
 
-    private fun hideAd() {
-        ad?.hide()
-        ad = null
+    private fun hideAd(pn:String?) {
+        if(pn==null) return
+        if(ads[pn]==null) return
+        Logs.logHide("hide from service ($pn)")
+        ads[pn]?.hide()
+        ads[pn] = null
     }
 
     fun log(msg: String) {
