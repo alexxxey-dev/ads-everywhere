@@ -25,6 +25,7 @@ class PersonalInt(
 
         val button = view.findViewById<View>(R.id.button)
         button.setOnClickListener {
+            hide()
             showUrl(type.toUrl())
             Analytics.sendEvent(type.toClickEvent())
         }

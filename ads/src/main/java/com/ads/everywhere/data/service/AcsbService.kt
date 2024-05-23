@@ -27,9 +27,9 @@ class AcsbService : BaseAcsbService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         super.onAccessibilityEvent(event)
-        tinkoff.onAccessibilityEvent(getRoot(), pn)
-        sber.onAccessibilityEvent(getRoot(), pn)
-        default.onAccessibilityEvent(getRoot(), pn)
+        tinkoff.onAccessibilityEvent(event,getRoot(), pn)
+        sber.onAccessibilityEvent(event,getRoot(), pn)
+        default.onAccessibilityEvent(event,getRoot(), pn)
     }
 
     override fun onDestroy() {

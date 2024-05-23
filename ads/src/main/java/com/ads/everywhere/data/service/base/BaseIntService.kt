@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.PowerManager
+import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
@@ -24,7 +25,7 @@ abstract class BaseIntService(
     private val repository: ServiceRepository,
     private val type: InterstitialType
 ) {
-    abstract fun showAd(pn:String?)
+    abstract fun showAd(pn: String?)
     abstract fun updateAppState(newPackage: String?)
     abstract fun canShowAd(root: AccessibilityNodeInfo?): Boolean
 
@@ -65,8 +66,7 @@ abstract class BaseIntService(
     }
 
 
-
-    fun onAccessibilityEvent(root: AccessibilityNodeInfo?, pn: String?) {
+    fun onAccessibilityEvent(event:AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
         if (!isValidPn(pn)) return
         if (isScreenLocked()) return
         updateAppState(pn)
@@ -86,7 +86,7 @@ abstract class BaseIntService(
         context.unregisterReceiver(screenListener)
     }
 
-    private fun hideAd(){
+    private fun hideAd() {
         ad?.hide()
         ad = null
     }
@@ -107,6 +107,11 @@ abstract class BaseIntService(
         }
     }
 
+    private fun isValidEvent(event: AccessibilityEvent): Boolean {
+        return event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                || event.eventType == AccessibilityEvent.TYPE_WINDOWS_CHANGED
+                || event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+    }
 
     private fun isValidPn(pn: String?): Boolean {
         return pn != null
@@ -122,7 +127,6 @@ abstract class BaseIntService(
         if (System.currentTimeMillis() - unlockTime < UNLOCK_DELAY) return true
         return false
     }
-
 
 
 }

@@ -38,10 +38,7 @@ class DefaultInt(
         draw(view)
         animateShow(view)
 
-        view.onBottomSwipe {
-            val banner = view.findViewById<View>(R.id.background)
-            animateHide(banner)
-        }
+
     }
 
     private fun draw(view: View) {
@@ -50,16 +47,22 @@ class DefaultInt(
         view.findViewById<ImageView>(R.id.app_logo).setImageDrawable(appLogo)
         view.findViewById<TextView>(R.id.app_title).text = appTitle
 
-        view.findViewById<View>(R.id.cross).setOnClickListener { animateHide(view) }
+        view.findViewById<View>(R.id.cross).setOnClickListener { animateHide(view)}
         view.findViewById<View>(R.id.back).setOnClickListener { animateHide(view) }
         view.findViewById<View>(R.id.button).setOnClickListener {
-            Analytics.sendEvent(type.toClickEvent())
-            showUrl(type.toUrl())
+            animateHide(view){
+                showUrl(type.toUrl())
+                Analytics.sendEvent(type.toClickEvent())
+            }
+
         }
+
+        val banner = view.findViewById<View>(R.id.banner)
+        banner.onBottomSwipe { animateHide(view) }
     }
 
     private fun animateShow(root: View) {
-        val banner = root.findViewById<View>(R.id.background)
+        val banner = root.findViewById<View>(R.id.banner)
         banner.runAfterDraw {
             val startHeight = 0
             val endHeight = banner.height
@@ -74,11 +77,14 @@ class DefaultInt(
         }
     }
 
-    private fun animateHide(root: View) {
-        val banner = root.findViewById<View>(R.id.background)
+    private fun animateHide(root: View, onComplete:()->Unit = {}) {
+        val banner = root.findViewById<View>(R.id.banner)
         val startHeight = banner.height
         val endHeight = 0
-        banner.animateHeight(startHeight, endHeight) { hide() }
+        banner.animateHeight(startHeight, endHeight) {
+            hide()
+            onComplete()
+        }
     }
 
     override fun onViewDestroyed() {

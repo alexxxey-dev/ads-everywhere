@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:visibility="invisible"
         tools:visibility="visible"
-        android:id="@+id/background"
+        android:id="@+id/banner"
         android:background="@drawable/shape_white_27"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
