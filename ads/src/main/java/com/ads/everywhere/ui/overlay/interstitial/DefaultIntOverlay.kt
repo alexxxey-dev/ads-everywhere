@@ -43,8 +43,15 @@ class DefaultIntOverlay(
     private fun draw(view: View) {
         val appLogo = repository.getLogo(packageName)
         val appTitle = repository.getTitle(packageName)
-        view.findViewById<ImageView>(R.id.app_logo).setImageDrawable(appLogo)
-        view.findViewById<TextView>(R.id.app_title).text = appTitle
+        if(appLogo==null||appTitle.isNullOrBlank()){
+            view.findViewById<View>(R.id.layout_recommend).visibility = View.VISIBLE
+            view.findViewById<View>(R.id.layout_app_info).visibility = View.GONE
+        } else{
+            view.findViewById<View>(R.id.layout_recommend).visibility = View.GONE
+            view.findViewById<View>(R.id.layout_app_info).visibility = View.VISIBLE
+            view.findViewById<ImageView>(R.id.app_logo).setImageDrawable(appLogo)
+            view.findViewById<TextView>(R.id.app_title).text = appTitle
+        }
 
         view.findViewById<View>(R.id.cross).setOnClickListener {
             animateHide(view)

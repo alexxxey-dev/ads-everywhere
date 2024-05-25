@@ -61,12 +61,31 @@ abstract class BaseIntService(
         })
     }
 
+    private fun isValidEvent(event: AccessibilityEvent): Boolean {
+        return event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                || event.eventType == AccessibilityEvent.TYPE_WINDOWS_CHANGED
+                || event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+    }
+
+    private fun isValidPn(pn: String?): Boolean {
+        return pn != null
+                && pn != context.packageName
+                && pn != context.applicationContext.packageName
+                && pn != "android"
+    }
+
+    private fun isScreenLocked(): Boolean {
+        if (!power.isInteractive) return true
+        if (keyguard.isKeyguardLocked) return true
+        if (screenState != ScreenState.UNLOCKED) return true
+        if (System.currentTimeMillis() - unlockTime < UNLOCK_DELAY) return true
+        return false
+    }
 
     fun onAccessibilityEvent(event: AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
-        if (!isValidEvent(event)) return
-        if (!isValidPn(pn)) return
-        if (isScreenLocked()) return
-        updateAppState(pn)
+        if (isValidEvent(event) && isValidPn(pn) && !isScreenLocked()){
+            updateAppState(pn)
+        }
 
         val appState = repository.getAppState(pn)
         if (appState == AppState.OPEN && canShowAd(root)) {
@@ -107,26 +126,7 @@ abstract class BaseIntService(
         }
     }
 
-    private fun isValidEvent(event: AccessibilityEvent): Boolean {
-        return event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                || event.eventType == AccessibilityEvent.TYPE_WINDOWS_CHANGED
-                || event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-    }
 
-    private fun isValidPn(pn: String?): Boolean {
-        return pn != null
-                && pn != context.packageName
-                && pn != context.applicationContext.packageName
-                && pn != "android"
-    }
-
-    private fun isScreenLocked(): Boolean {
-        if (!power.isInteractive) return true
-        if (keyguard.isKeyguardLocked) return true
-        if (screenState != ScreenState.UNLOCKED) return true
-        if (System.currentTimeMillis() - unlockTime < UNLOCK_DELAY) return true
-        return false
-    }
 
 
 }
