@@ -4,6 +4,7 @@ import android.content.Context
 import com.ads.everywhere.data.models.MyVideo
 import com.ads.everywhere.data.repository.VideoRepository
 import com.ads.everywhere.util.Logs
+import com.ads.everywhere.util.ext.isConnected
 import io.appmetrica.analytics.impl.pn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,7 @@ class CacheVideoService(private val context: Context) {
         while (this.isActive) {
             delay(1000)
 
+            if(!context.isConnected) continue
             if (video != null) continue
 
             video = videoRepository.provide()

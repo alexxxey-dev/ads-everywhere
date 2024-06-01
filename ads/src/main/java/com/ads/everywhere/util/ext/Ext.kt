@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -25,6 +27,20 @@ import com.ads.everywhere.ui.interstitial.DefaultIntOverlay
 import com.ads.everywhere.util.OnSwipeListener
 import io.appmetrica.analytics.AppMetrica
 import java.util.Locale
+
+val Context.isConnected: Boolean
+    get() {
+        val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return run {
+            val nw = connectivityManager.activeNetwork ?: return false
+            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+            when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
+        }
+    }
 
 
 @SuppressLint("InternalInsetResource")

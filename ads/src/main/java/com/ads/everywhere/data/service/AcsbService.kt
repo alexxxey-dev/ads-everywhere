@@ -30,15 +30,16 @@ class AcsbService : BaseAcsbService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         super.onAccessibilityEvent(event)
-        tinkoff.onAccessibilityEvent(event,getRoot(), pn)
-        sber.onAccessibilityEvent(event,getRoot(), pn)
-        default.onAccessibilityEvent(event,getRoot(), pn)
+        if(::tinkoff.isInitialized)tinkoff.onAccessibilityEvent(event,getRoot(), pn)
+        if(::sber.isInitialized)sber.onAccessibilityEvent(event,getRoot(), pn)
+        if(::default.isInitialized) default.onAccessibilityEvent(event,getRoot(), pn)
     }
 
     override fun onDestroy() {
-        video.onDestroy()
-        tinkoff.onDestroy()
-        sber.onDestroy()
+        if(::video.isInitialized)  video.onDestroy()
+        if(::tinkoff.isInitialized)   tinkoff.onDestroy()
+        if(::sber.isInitialized)    sber.onDestroy()
+
         super.onDestroy()
     }
 

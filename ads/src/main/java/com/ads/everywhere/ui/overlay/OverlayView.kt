@@ -47,6 +47,7 @@ abstract class OverlayView(
 
     fun showUrl(url: String) {
         try {
+            Logs.log(TAG, "show url ($url)")
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }

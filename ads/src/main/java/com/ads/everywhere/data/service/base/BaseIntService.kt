@@ -9,12 +9,10 @@ import android.os.PowerManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.ads.everywhere.data.models.AppState
-import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.models.ScreenState
 import com.ads.everywhere.data.repository.ServiceRepository
 import com.ads.everywhere.ui.interstitial.BaseIntOverlay
 import com.ads.everywhere.util.Logs
-import io.appmetrica.analytics.impl.ad
 
 
 abstract class BaseIntService(
@@ -83,17 +81,31 @@ abstract class BaseIntService(
     }
 
     fun onAccessibilityEvent(event: AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
-        if (isValidEvent(event) && isValidPn(pn) && !isScreenLocked()) {
-            updateAppState(pn)
-        }
+        val validEvent = isValidEvent(event)
+        val validPn = isValidPn(pn)
+        val screenUnlocked = !isScreenLocked()
+        if (validEvent && validPn && screenUnlocked) updateAppState(pn)
 
+        handleOpenedState(root,pn)
+        handleClosedState(pn)
+    }
+
+    private fun handleClosedState(currentPackage:String?){
+        val currentState = repository.getAppState(currentPackage)
+        if (currentState== AppState.CLOSE) hideAd(currentPackage)
+
+        ads.keys.forEach {adsPackage->
+            val state = repository.getAppState(adsPackage)
+            if(state==AppState.CLOSE) hideAd(adsPackage)
+        }
+    }
+
+    private fun handleOpenedState(root: AccessibilityNodeInfo?, pn: String?){
         val appState = repository.getAppState(pn)
+        log("app state = $appState ($pn)")
         if (appState == AppState.OPEN && canShowAd(root)) {
             hideAd(pn)
             if (showAd(pn)) repository.setAppState(pn, AppState.SHOW_AD)
-        }
-        if (appState == AppState.CLOSE) {
-            hideAd(pn)
         }
     }
 
@@ -104,7 +116,7 @@ abstract class BaseIntService(
     private fun hideAd(pn: String?) {
         if (pn == null) return
         if (ads[pn] == null) return
-
+        log("hide ad ($pn)")
         ads[pn]?.hide()
         ads[pn] = null
     }

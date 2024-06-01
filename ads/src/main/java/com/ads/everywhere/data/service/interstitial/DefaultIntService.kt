@@ -20,8 +20,7 @@ class DefaultIntService(
     private val videoService: CacheVideoService
 ) : BaseIntService(context, repository, "INT_DEFAULT") {
     companion object {
-        //TODO 5
-        private const val SHOW_FREQ = 1
+        private const val SHOW_FREQ = 5
         private const val PACKAGE_NAME = "default"
     }
 
@@ -48,10 +47,15 @@ class DefaultIntService(
     )
 
     override fun updateAppState(newPackage: String?) {
-        if (currentPackage != newPackage && isValidApp(newPackage)) {
+        if (currentPackage != newPackage) {
+            log("closed $currentPackage")
             repository.setAppState(currentPackage, AppState.CLOSE)
-            repository.setAppState(newPackage, AppState.OPEN)
-            repository.incLaunchCount(PACKAGE_NAME)
+
+            if(isValidApp(newPackage)){
+                log("opened $newPackage")
+                repository.setAppState(newPackage, AppState.OPEN)
+                repository.incLaunchCount(PACKAGE_NAME)
+            }
         }
 
 

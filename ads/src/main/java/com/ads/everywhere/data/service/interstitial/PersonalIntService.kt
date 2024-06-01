@@ -25,7 +25,7 @@ class PersonalIntService(
         if (count % SHOW_FREQ != 0) return false
 
         if(root==null) return false
-        val id = type.toAcsbView() ?: return false
+        val id = type.toAcsbView()
         val isMainScreen = root.findAccessibilityNodeInfosByViewId(id).any { it.isVisibleToUser }
         log("main = $isMainScreen ($appPackage)")
         return isMainScreen

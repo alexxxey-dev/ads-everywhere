@@ -2,6 +2,7 @@ package com.ads.everywhere.ui.interstitial
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.VideoView
@@ -12,6 +13,7 @@ import com.ads.everywhere.data.models.MyVideo
 import com.ads.everywhere.data.repository.AppInfoRepository
 import com.ads.everywhere.ui.overlay.OverlayCallback
 import com.ads.everywhere.util.Logs
+import com.ads.everywhere.util.ext.statusBarHeight
 
 
 class VideoIntOverlay(
@@ -19,10 +21,11 @@ class VideoIntOverlay(
     private val packageName: String?,
     private val callback: OverlayCallback,
     private val video: MyVideo
-) : BaseIntOverlay(context){
+) : BaseIntOverlay(context) {
     private val repository = AppInfoRepository(context)
+    private lateinit var videoView: VideoView
 
-    companion object{
+    companion object {
         const val TAG = "VIDEO_SERVICE"
     }
 
@@ -34,15 +37,20 @@ class VideoIntOverlay(
 
     override fun onViewDestroyed() {
         callback.onViewDestroyed()
+        if (::videoView.isInitialized) videoView.stopPlayback()
     }
 
-    private fun draw(view:View){
+    private fun draw(view: View) {
+        val header = view.findViewById<View>(R.id.header)
+        val statusBarHeight = view.context.statusBarHeight()
+       (header.layoutParams as MarginLayoutParams).setMargins(0, statusBarHeight, 0, 0)
+
         val appLogo = repository.getLogo(packageName)
         val appTitle = repository.getTitle(packageName)
-        if(appLogo==null||appTitle.isNullOrBlank()){
+        if (appLogo == null || appTitle.isNullOrBlank()) {
             view.findViewById<View>(R.id.layout_recommend).visibility = View.VISIBLE
             view.findViewById<View>(R.id.layout_app_info).visibility = View.GONE
-        } else{
+        } else {
             view.findViewById<View>(R.id.layout_recommend).visibility = View.GONE
             view.findViewById<View>(R.id.layout_app_info).visibility = View.VISIBLE
             view.findViewById<ImageView>(R.id.app_logo).setImageDrawable(appLogo)
@@ -56,7 +64,7 @@ class VideoIntOverlay(
             hide()
         }
 
-        val videoView = view.findViewById<VideoView>(R.id.video).apply {
+        videoView = view.findViewById<VideoView>(R.id.video).apply {
             setVideoURI(video.file.toUri())
             requestFocus()
             start()
