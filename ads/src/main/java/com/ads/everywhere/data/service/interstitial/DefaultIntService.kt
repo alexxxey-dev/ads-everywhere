@@ -19,8 +19,7 @@ class DefaultIntService(
     private val videoService: CacheVideoService
 ) : BaseIntService(context, repository, "INT_DEFAULT") {
     companion object {
-        //TODO 7
-        private const val SHOW_FREQ = 1
+        private const val SHOW_FREQ = 7
         private const val PACKAGE_NAME = "default"
     }
 
