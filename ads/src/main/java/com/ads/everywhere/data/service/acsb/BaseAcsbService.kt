@@ -1,4 +1,4 @@
-package com.ads.everywhere.data.service.base
+package com.ads.everywhere.data.service.acsb
 
 import android.accessibilityservice.AccessibilityService
 import android.content.ComponentName

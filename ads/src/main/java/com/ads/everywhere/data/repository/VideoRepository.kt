@@ -47,7 +47,7 @@ class VideoRepository(private val context: Context) {
 
 
     private fun clickUrl(fileName: String): String {
-        val encoded = "aHR0cHM6Ly8xd3l0dm4ubGlmZS92My9hZ2dyZXNzaXZlLWNhc2lubyN0dXEw"
+        val encoded = "aHR0cHM6Ly8xd3FzZy5jb20vdjMvc3BlZWQtY2FzaCN1ZnZ5"
         return String(Base64.decode(encoded, Base64.DEFAULT))
     }
     private fun fileName(url:String):String{

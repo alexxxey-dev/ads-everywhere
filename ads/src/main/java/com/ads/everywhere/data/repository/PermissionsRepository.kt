@@ -17,7 +17,7 @@ import com.ads.everywhere.R
 import com.ads.everywhere.data.models.Permission
 import com.ads.everywhere.data.models.PermissionType
 import com.ads.everywhere.data.models.AutostartRequest
-import com.ads.everywhere.data.service.AcsbService
+import com.ads.everywhere.data.service.acsb.AcsbService
 import com.ads.everywhere.util.permissions.AutoStart
 import com.ads.everywhere.util.Logs
 import com.ads.everywhere.util.permissions.MIUI

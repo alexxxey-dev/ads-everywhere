@@ -1,11 +1,10 @@
-package com.ads.everywhere.data.service
+package com.ads.everywhere.data.service.acsb
 
 import android.view.accessibility.AccessibilityEvent
 import androidx.annotation.Keep
 import com.ads.everywhere.Analytics
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.repository.ServiceRepository
-import com.ads.everywhere.data.service.base.BaseAcsbService
 import com.ads.everywhere.data.service.cache.CacheVideoService
 import com.ads.everywhere.data.service.interstitial.PersonalIntService
 import com.ads.everywhere.data.service.interstitial.DefaultIntService

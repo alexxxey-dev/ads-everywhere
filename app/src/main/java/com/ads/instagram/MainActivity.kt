@@ -21,8 +21,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val ads = AdsEverywhere(this).apply {
-            //TODO hide on release
-            SHOW_LOGS = false
+            SHOW_LOGS = true
             init()
             onRewardScreen()
         }
@@ -33,11 +32,6 @@ class MainActivity : AppCompatActivity() {
             }
             ads.requestPermissions()
         }
-
-
-
-
-
     }
 
 

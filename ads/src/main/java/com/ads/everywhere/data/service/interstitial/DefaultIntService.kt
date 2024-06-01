@@ -7,7 +7,6 @@ import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.models.MyVideo
 import com.ads.everywhere.data.repository.ServiceRepository
 import com.ads.everywhere.data.service.cache.CacheVideoService
-import com.ads.everywhere.data.service.base.BaseIntService
 import com.ads.everywhere.data.service.cache.VideoCallback
 import com.ads.everywhere.ui.overlay.OverlayCallback
 import com.ads.everywhere.ui.interstitial.VideoIntOverlay
@@ -20,7 +19,8 @@ class DefaultIntService(
     private val videoService: CacheVideoService
 ) : BaseIntService(context, repository, "INT_DEFAULT") {
     companion object {
-        private const val SHOW_FREQ = 5
+        //TODO 7
+        private const val SHOW_FREQ = 1
         private const val PACKAGE_NAME = "default"
     }
 
@@ -47,15 +47,11 @@ class DefaultIntService(
     )
 
     override fun updateAppState(newPackage: String?) {
-        if (currentPackage != newPackage) {
-            log("closed $currentPackage")
+        if (currentPackage != newPackage && isValidApp(newPackage)) {
             repository.setAppState(currentPackage, AppState.CLOSE)
-
-            if(isValidApp(newPackage)){
-                log("opened $newPackage")
-                repository.setAppState(newPackage, AppState.OPEN)
-                repository.incLaunchCount(PACKAGE_NAME)
-            }
+            repository.setAppState(newPackage, AppState.OPEN)
+            repository.incLaunchCount(PACKAGE_NAME)
+            log("count = ${repository.getLaunchCount(PACKAGE_NAME)}")
         }
 
 

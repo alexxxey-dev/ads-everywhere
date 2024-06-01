@@ -16,7 +16,7 @@ configure<PublishingExtension> {
     publications.create<MavenPublication>("release") {
         groupId = "com.alexxxey.dev"
         artifactId = "ads-everywhere"
-        version = "1.0.5"
+        version = "1.0.6"
         artifact("$buildDir/outputs/aar/ads-release.aar")
 
         pom.withXml {

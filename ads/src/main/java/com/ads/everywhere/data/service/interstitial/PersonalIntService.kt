@@ -5,10 +5,8 @@ import android.view.accessibility.AccessibilityNodeInfo
 import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.repository.ServiceRepository
-import com.ads.everywhere.data.service.base.BaseIntService
 import com.ads.everywhere.ui.interstitial.PersonalIntOverlay
 import com.ads.everywhere.ui.overlay.OverlayCallback
-import io.appmetrica.analytics.impl.ad
 
 class PersonalIntService(
     private val context: Context,

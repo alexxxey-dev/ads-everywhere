@@ -1,4 +1,4 @@
-package com.ads.everywhere.data.service.base
+package com.ads.everywhere.data.service.interstitial
 
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
@@ -25,7 +25,7 @@ abstract class BaseIntService(
     abstract fun canShowAd(root: AccessibilityNodeInfo?): Boolean
 
     companion object {
-        const val UNLOCK_DELAY = 1000L
+        const val UNLOCK_DELAY = 5000L
         const val TAG = "BANK_SERVICE"
     }
 
@@ -81,33 +81,21 @@ abstract class BaseIntService(
     }
 
     fun onAccessibilityEvent(event: AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
-        val validEvent = isValidEvent(event)
-        val validPn = isValidPn(pn)
-        val screenUnlocked = !isScreenLocked()
-        if (validEvent && validPn && screenUnlocked) updateAppState(pn)
-
-        handleOpenedState(root,pn)
-        handleClosedState(pn)
-    }
-
-    private fun handleClosedState(currentPackage:String?){
-        val currentState = repository.getAppState(currentPackage)
-        if (currentState== AppState.CLOSE) hideAd(currentPackage)
-
-        ads.keys.forEach {adsPackage->
-            val state = repository.getAppState(adsPackage)
-            if(state==AppState.CLOSE) hideAd(adsPackage)
+        if (isValidEvent(event) && isValidPn(pn) && !isScreenLocked()) {
+            updateAppState(pn)
         }
-    }
 
-    private fun handleOpenedState(root: AccessibilityNodeInfo?, pn: String?){
         val appState = repository.getAppState(pn)
-        log("app state = $appState ($pn)")
         if (appState == AppState.OPEN && canShowAd(root)) {
             hideAd(pn)
             if (showAd(pn)) repository.setAppState(pn, AppState.SHOW_AD)
         }
+        if (appState == AppState.CLOSE) {
+            hideAd(pn)
+        }
     }
+
+
 
     fun onDestroy() {
         context.unregisterReceiver(screenListener)

@@ -182,7 +182,6 @@ fun Context.isSystemApp(packageName:String?):Boolean{
         val systemUpdated = (applicationInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0)
         system || systemUpdated
     } catch (e: Exception) {
-        e.printStackTrace()
         false
     }
 }
