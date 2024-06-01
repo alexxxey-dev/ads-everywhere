@@ -1,4 +1,4 @@
-package com.ads.everywhere.ui.overlay.interstitial
+package com.ads.everywhere.ui.interstitial
 
 import android.content.Context
 import android.view.View
@@ -21,20 +21,18 @@ class DefaultIntOverlay(
     private val packageName: String?,
     private val callback: OverlayCallback
 ) : BaseIntOverlay(context) {
-    private val type = InterstitialType.DEFAULT
-
+    private val url = "https://pxl.leads.su/click/0dcfd804e48738857842c6c1d7c7e35c?source=place3&erid=LjN8K4PHN"
     companion object {
         const val TAG = "AD_ACTIVITY"
-        const val ANIMATION = 250L
     }
 
     override val layoutRes: Int
-        get() = type.toRes()
+        get() = R.layout.interstitial_default
 
     private val repository = AppInfoRepository(context)
 
     override fun onViewCreated(view: View) {
-        Analytics.sendEvent(type.toShowEvent())
+        Analytics.sendEvent(Analytics.SHOW_DEFAULT_INTERSTITIAL)
 
         draw(view)
         animateShow(view)
@@ -62,10 +60,9 @@ class DefaultIntOverlay(
 
         view.findViewById<View>(R.id.button).setOnClickListener {
             animateHide(view) {
-                showUrl(type.toUrl())
-                Analytics.sendEvent(type.toClickEvent())
+                showUrl(url)
+                Analytics.sendEvent(Analytics.CLICK_DEFAULT_INTERSTITIAL)
             }
-
         }
 
         val banner = view.findViewById<View>(R.id.banner)

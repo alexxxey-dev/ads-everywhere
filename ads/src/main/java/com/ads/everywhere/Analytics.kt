@@ -41,6 +41,9 @@ class Analytics(
         const val SHOW_SBER_INTERSTITIAL = "SHOW_SBER_INTERSTITIAL"
         const val CLICK_SBER_INTERSTITIAL = "CLICK_SBER_INTERSTITIAL"
 
+        const val SHOW_VIDEO_INTERSTITIAL = "SHOW_VIDEO_INTERSTITIAL"
+        const val CLICK_VIDEO_INTERSTITIAL = "CLICK_VIDEO_INTERSTITIAL"
+
         fun init(context:Context){
             try {
                 val apiKey = context.getString(R.string.app_metrica_api_key)

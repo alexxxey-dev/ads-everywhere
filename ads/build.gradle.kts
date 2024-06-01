@@ -16,7 +16,7 @@ configure<PublishingExtension> {
     publications.create<MavenPublication>("release") {
         groupId = "com.alexxxey.dev"
         artifactId = "ads-everywhere"
-        version = "1.0.3"
+        version = "1.0.4"
         artifact("$buildDir/outputs/aar/ads-release.aar")
 
         pom.withXml {
@@ -25,7 +25,6 @@ configure<PublishingExtension> {
             configurations.implementation.get().dependencies.forEach{ dependency ->
                 if (dependency.group == null ||
                     dependency.version == null ||
-                    dependency.name == null ||
                     dependency.name == "unspecified") {
                     return@forEach
                 }
@@ -70,13 +69,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-        debug {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
     }
 
     compileOptions {
@@ -109,7 +101,7 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.4.2")
     implementation("io.insert-koin:koin-android:3.4.2")
 
-
-
+    //network requests
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 

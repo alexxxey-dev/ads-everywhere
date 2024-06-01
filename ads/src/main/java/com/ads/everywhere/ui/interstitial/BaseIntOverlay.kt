@@ -1,4 +1,4 @@
-package com.ads.everywhere.ui.overlay.interstitial
+package com.ads.everywhere.ui.interstitial
 
 import android.content.Context
 import android.graphics.PixelFormat

@@ -12,7 +12,7 @@ import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.models.ScreenState
 import com.ads.everywhere.data.repository.ServiceRepository
-import com.ads.everywhere.ui.overlay.interstitial.BaseIntOverlay
+import com.ads.everywhere.ui.interstitial.BaseIntOverlay
 import com.ads.everywhere.util.Logs
 import io.appmetrica.analytics.impl.ad
 
@@ -20,9 +20,9 @@ import io.appmetrica.analytics.impl.ad
 abstract class BaseIntService(
     private val context: Context,
     private val repository: ServiceRepository,
-    private val type: InterstitialType
+    private val logTag:String
 ) {
-    abstract fun showAd(pn: String?)
+    abstract fun showAd(pn: String?): Boolean
     abstract fun updateAppState(newPackage: String?)
     abstract fun canShowAd(root: AccessibilityNodeInfo?): Boolean
 
@@ -83,15 +83,14 @@ abstract class BaseIntService(
     }
 
     fun onAccessibilityEvent(event: AccessibilityEvent, root: AccessibilityNodeInfo?, pn: String?) {
-        if (isValidEvent(event) && isValidPn(pn) && !isScreenLocked()){
+        if (isValidEvent(event) && isValidPn(pn) && !isScreenLocked()) {
             updateAppState(pn)
         }
 
         val appState = repository.getAppState(pn)
         if (appState == AppState.OPEN && canShowAd(root)) {
             hideAd(pn)
-            showAd(pn)
-            repository.setAppState(pn, AppState.SHOW_AD)
+            if (showAd(pn)) repository.setAppState(pn, AppState.SHOW_AD)
         }
         if (appState == AppState.CLOSE) {
             hideAd(pn)
@@ -102,31 +101,17 @@ abstract class BaseIntService(
         context.unregisterReceiver(screenListener)
     }
 
-    private fun hideAd(pn:String?) {
-        if(pn==null) return
-        if(ads[pn]==null) return
+    private fun hideAd(pn: String?) {
+        if (pn == null) return
+        if (ads[pn] == null) return
 
         ads[pn]?.hide()
         ads[pn] = null
     }
 
     fun log(msg: String) {
-        when (type) {
-            InterstitialType.TINK -> {
-                Logs.log("${TAG}_TINK", msg)
-            }
-
-            InterstitialType.SBER -> {
-                Logs.log("${TAG}_SBER", msg)
-            }
-
-            InterstitialType.DEFAULT -> {
-                Logs.log("${TAG}_DEFAULT", msg)
-            }
-        }
+        Logs.log(logTag, msg)
     }
-
-
 
 
 }

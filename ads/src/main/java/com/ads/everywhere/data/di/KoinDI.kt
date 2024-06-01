@@ -35,7 +35,6 @@ object KoinDI {
     }
 
     private val repositories = module {
-        single { InstagramRepository() }
         single { PrefsRepository(get()) }
         single { UsageRepository(get(), androidContext()) }
         single { PermissionsRepository(get(), androidContext(), get(), get(), get()) }

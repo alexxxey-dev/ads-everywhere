@@ -21,7 +21,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ads.everywhere.R
-import com.ads.everywhere.ui.overlay.interstitial.DefaultIntOverlay
+import com.ads.everywhere.ui.interstitial.DefaultIntOverlay
 import com.ads.everywhere.util.OnSwipeListener
 import io.appmetrica.analytics.AppMetrica
 import java.util.Locale
@@ -96,7 +96,7 @@ fun View.onBottomSwipe(onBottomSwipe: () -> Unit) {
             override fun onAnimationRepeat(animation: Animator) { }
         })
         interpolator = AccelerateDecelerateInterpolator()
-        setDuration(DefaultIntOverlay.ANIMATION)
+        setDuration(250)
         start()
     }
 }

@@ -18,8 +18,7 @@ class PrefsRepository(private val util: PrefsUtil) {
 
     fun usageStatsSent(value: Boolean? = null) = util.bool("usage_stats_completed", value)
 
-    fun instagramShowFreq(value: Int? = null) =
-        util.int("show_freq_inst", value, Instagram.DEFAULT_SHOW_FREQ)
+    fun videoUrlIndex(value:Int? = null) = util.int("url_index",value, -1)
 
 
 }

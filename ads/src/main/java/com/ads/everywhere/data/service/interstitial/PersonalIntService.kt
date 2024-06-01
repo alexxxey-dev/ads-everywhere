@@ -6,7 +6,7 @@ import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.repository.ServiceRepository
 import com.ads.everywhere.data.service.base.BaseIntService
-import com.ads.everywhere.ui.overlay.interstitial.PersonalIntOverlay
+import com.ads.everywhere.ui.interstitial.PersonalIntOverlay
 import com.ads.everywhere.ui.overlay.OverlayCallback
 import io.appmetrica.analytics.impl.ad
 
@@ -14,7 +14,7 @@ class PersonalIntService(
     private val context: Context,
     private val repository: ServiceRepository,
     private val type: InterstitialType
-) : BaseIntService(context, repository, type) {
+) : BaseIntService(context, repository, "INT_${type.name}") {
     private val appPackage = type.toAppPackage()
     companion object{
         private const val SHOW_FREQ = 2
@@ -49,8 +49,8 @@ class PersonalIntService(
     }
 
 
-    override fun showAd(pn: String?) {
-        if(pn==null) return
+    override fun showAd(pn: String?):Boolean {
+        if(pn==null) return false
         ads[pn] = PersonalIntOverlay(
             context,
             type,
@@ -60,6 +60,7 @@ class PersonalIntService(
                 }
             })
         ads[pn]?.show()
+        return true
     }
 
 
