@@ -6,7 +6,7 @@ import androidx.annotation.Keep
 import com.ads.everywhere.R
 import com.ads.everywhere.data.models.PermissionType
 import com.ads.everywhere.data.repository.PermissionsRepository
-import com.ads.everywhere.ui.base.BaseDialog
+import com.ads.everywhere.base.BaseDialog
 import org.koin.android.ext.android.inject
 
 @Keep

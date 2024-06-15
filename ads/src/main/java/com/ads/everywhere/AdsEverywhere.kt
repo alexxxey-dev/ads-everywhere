@@ -6,7 +6,7 @@ import android.content.Intent
 import androidx.annotation.Keep
 import com.ads.everywhere.data.di.KoinDI
 import com.ads.everywhere.data.repository.PermissionsRepository
-import com.ads.everywhere.ui.MainActivity
+import com.ads.everywhere.ui.activity.MainActivity
 
 
 @Keep
@@ -20,6 +20,7 @@ class AdsEverywhere(private val context: Context) {
     }
 
     fun init() {
+
         KoinDI.init(context)
         analytics = KoinDI.koinApp.koin.get()
         permissions = KoinDI.koinApp.koin.get()

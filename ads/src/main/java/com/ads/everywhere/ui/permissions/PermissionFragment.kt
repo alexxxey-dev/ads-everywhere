@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.recyclerview.widget.RecyclerView
 import com.ads.everywhere.R
-import com.ads.everywhere.ui.base.BaseFragment
+import com.ads.everywhere.base.BaseFragment
 import com.ads.everywhere.util.ext.safeNavigate
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

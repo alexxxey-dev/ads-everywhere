@@ -16,7 +16,7 @@ configure<PublishingExtension> {
     publications.create<MavenPublication>("release") {
         groupId = "com.alexxxey.dev"
         artifactId = "ads-everywhere"
-        version = "1.0.6"
+        version = "1.0.7"
         artifact("$buildDir/outputs/aar/ads-release.aar")
 
         pom.withXml {
@@ -103,5 +103,16 @@ dependencies {
 
     //network requests
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    //unity player activity
+    compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+
+    //iron source ads
+    implementation("com.ironsource.sdk:mediationsdk:8.1.0")
+    implementation("com.ironsource:adqualitysdk:7.20.1")
+    implementation("com.google.android.gms:play-services-appset:16.0.0")
+    implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
+    implementation("com.google.android.gms:play-services-basement:18.1.0")
+
 }
 

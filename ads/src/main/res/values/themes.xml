@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="MainActivityTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="MainTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -27,8 +27,13 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="InterstitialActivityTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="android:forceDarkAllowed">false</item>
-        <item name="android:statusBarColor">#00000000</item>
+    <style name="InterstitialTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 </resources>

@@ -5,7 +5,7 @@ import android.view.View
 import androidx.annotation.Keep
 import com.ads.everywhere.R
 import com.ads.everywhere.Analytics
-import com.ads.everywhere.ui.base.BaseDialog
+import com.ads.everywhere.base.BaseDialog
 import com.ads.everywhere.util.ext.safeNavigate
 import org.koin.android.ext.android.inject
 

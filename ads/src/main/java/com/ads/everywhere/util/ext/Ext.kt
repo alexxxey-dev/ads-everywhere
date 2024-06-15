@@ -23,7 +23,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ads.everywhere.R
-import com.ads.everywhere.ui.interstitial.DefaultIntOverlay
 import com.ads.everywhere.util.OnSwipeListener
 import io.appmetrica.analytics.AppMetrica
 import java.util.Locale
