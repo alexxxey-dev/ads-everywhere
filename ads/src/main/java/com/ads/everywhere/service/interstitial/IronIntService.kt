@@ -17,8 +17,7 @@ class IronIntService(
     private val controller: IronSourceController
 ) : BaseIntService(context, repository, "IRON_SOURCE_SERVICE") {
     companion object {
-        //TODO change
-        private const val SHOW_FREQ = 1
+        private const val SHOW_FREQ = 3
         private const val PACKAGE_NAME = "INT_IRON"
     }
 

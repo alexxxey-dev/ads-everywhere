@@ -47,8 +47,9 @@ class IronSourceController(private val context: Context) {
 
         override fun onAdShowSucceeded(p0: AdInfo?) {
             Logs.log(TAG, "onAdShowSucceeded; $p0")
+            Analytics.sendEvent(Analytics.SHOW_IRON_INTERSTITIAL)
+
             if(showFromService){
-                Analytics.sendEvent(Analytics.SHOW_IRON_INTERSTITIAL)
                 hideAfterDismiss = true
                 showFromService = false
             }

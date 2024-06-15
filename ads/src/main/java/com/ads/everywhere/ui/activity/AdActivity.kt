@@ -25,20 +25,19 @@ class AdActivity : AppCompatActivity() {
         const val SHOW_INTERSTITIAL = "AdActivity_SHOW_INTERSTITIAL"
         const val STOP = "AdActivity_STOP"
 
+        fun start(context: Context) {
+            if (isUnity()) startUnityActivity(context) else startAdActivity(context)
+        }
+
+        fun stop(context: Context) {
+            if(isUnity()) stopUnityActivity(context) else stopAdActivity(context)
+        }
+
         private fun isUnity() = try {
             Class.forName("com.unity3d.player.UnityPlayer")
             true
         } catch (e: ClassNotFoundException) {
             false
-        }
-
-        fun start(context: Context) {
-            if (isUnity()) startUnityActivity(context) else startAdActivity(context)
-        }
-
-
-        fun stop(context: Context) {
-            if(isUnity()) stopUnityActivity(context) else stopAdActivity(context)
         }
 
         private fun stopUnityActivity(context:Context){

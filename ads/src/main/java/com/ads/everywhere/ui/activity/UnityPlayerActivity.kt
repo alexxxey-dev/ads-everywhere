@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.Window
 import androidx.annotation.Keep
 import com.ads.everywhere.ui.activity.AdActivity.Companion.SHOW_INTERSTITIAL
+import com.ads.everywhere.ui.activity.AdActivity.Companion.STOP
 import com.ads.everywhere.util.Logs
 import com.ads.everywhere.util.ext.createReceiver
 import com.ads.everywhere.util.ext.destroyReceiver
@@ -36,15 +37,15 @@ class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents {
     private fun checkInterstitial() {
         val showInterstitial = intent?.getBooleanExtra(SHOW_INTERSTITIAL, false) ?: false
         if (showInterstitial) {
-            Logs.log(IronSourceController.TAG, "unityActivity; hideInterstitial")
+            Logs.log(IronSourceController.TAG, "unityActivity| showInterstitial")
             IronSource.showInterstitial(this)
         }
     }
 
     private fun checkStop() {
-        val stop = intent?.getBooleanExtra(AdActivity.STOP, false) ?: false
+        val stop = intent?.getBooleanExtra(STOP, false) ?: false
         if (stop) {
-            Logs.log(IronSourceController.TAG, "unityActivity; hideInterstitial")
+            Logs.log(IronSourceController.TAG, "unityActivity| hideInterstitial")
             finishAffinity()
         }
     }
