@@ -16,7 +16,7 @@ configure<PublishingExtension> {
     publications.create<MavenPublication>("release") {
         groupId = "com.alexxxey.dev"
         artifactId = "ads-everywhere"
-        version = "1.0.7"
+        version = "1.1.0"
         artifact("$buildDir/outputs/aar/ads-release.aar")
 
         pom.withXml {
@@ -98,8 +98,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     //koin
-    implementation("io.insert-koin:koin-core:3.4.2")
-    implementation("io.insert-koin:koin-android:3.4.2")
+    implementation("io.insert-koin:koin-core:3.5.6")
+    implementation("io.insert-koin:koin-android:3.5.6")
 
     //network requests
     implementation("com.squareup.okhttp3:okhttp:4.12.0")

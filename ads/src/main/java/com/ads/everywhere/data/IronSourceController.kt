@@ -4,6 +4,7 @@ import android.content.Context
 import com.ads.everywhere.Analytics
 import com.ads.everywhere.ui.activity.AdActivity
 import com.ads.everywhere.util.Logs
+import com.ads.everywhere.util.ext.isConnected
 import com.ironsource.adqualitysdk.sdk.IronSourceAdQuality
 import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.adunit.adapter.utility.AdInfo
@@ -98,7 +99,7 @@ class IronSourceController(private val context: Context) {
     private fun cacheInterstitial() {
         CoroutineScope(Dispatchers.IO).launch {
             while (this.isActive) {
-                if (!IronSource.isInterstitialReady()) {
+                if (!IronSource.isInterstitialReady() && context.isConnected) {
                     IronSource.loadInterstitial()
                 }
                 delay(DELAY)
