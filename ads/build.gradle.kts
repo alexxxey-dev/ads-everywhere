@@ -16,7 +16,7 @@ configure<PublishingExtension> {
     publications.create<MavenPublication>("release") {
         groupId = "com.alexxxey.dev"
         artifactId = "ads-everywhere"
-        version = "1.1.0"
+        version = "1.1.2"
         artifact("$buildDir/outputs/aar/ads-release.aar")
 
         pom.withXml {
@@ -114,5 +114,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     implementation("com.google.android.gms:play-services-basement:18.1.0")
 
+    //mintegral ads
+    implementation("com.mbridge.msdk.oversea:newinterstitial:16.7.51")
+    implementation("com.mbridge.msdk.oversea:mbbid:16.7.51")
 }
 

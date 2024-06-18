@@ -23,6 +23,7 @@ abstract class BaseAcsbService : AccessibilityService(){
     private fun setupExceptionHandler(){
         val uncaughtExceptionHandler: Thread.UncaughtExceptionHandler =
             Thread.UncaughtExceptionHandler { t, e ->
+                e.printStackTrace()
                 Analytics.reportException("accessibility exception", e)
                 val stacktrace = Log.getStackTraceString(e)
                 Analytics.sendEvent("accessibility exception stacktrace", stacktrace)

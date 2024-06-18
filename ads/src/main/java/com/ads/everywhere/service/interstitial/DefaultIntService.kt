@@ -25,25 +25,7 @@ class DefaultIntService(
 
     private var currentPackage: String? = null
     private var prevPackage: String? = null
-    private val whiteList = listOf(
-        "com.google.android.apps.walletnfcrel",
-        "com.google.ar.lens",
-        "com.google.android.calendar",
-        "com.google.android.apps.nbu.files",
-        "com.google.android.apps.subscriptions.red",
-        "com.google.android.apps.photos",
-        "com.google.android.inputmethod.latin",
-        "com.google.android.apps.mapslite",
-        "com.google.android.contacts",
-        "com.google.android.apps.googleassistant",
-        "com.google.android.apps.photosgo",
-        "com.google.android.calculator",
-        "com.google.android.deskclock",
-        "com.google.android.apps.messaging",
-        "com.google.android.dialer",
-        "com.google.android.apps.maps",
-        "com.google.android.GoogleCamera",
-    )
+
 
     override fun updateAppState(newPackage: String?) {
         if (currentPackage != newPackage && isValidApp(newPackage)) {
@@ -77,7 +59,9 @@ class DefaultIntService(
                 videoService.onVideoWatched(pn)
             }
         }
-        val videoCallback = object : VideoCallback {
+
+
+        videoService.requestVideo(object : VideoCallback {
             override fun onReceive(video: MyVideo) {
                 if (currentPackage != pn)  return
 
@@ -86,10 +70,7 @@ class DefaultIntService(
 
                 Logs.log(TAG, "receive video callback (${video.file.path})")
             }
-        }
-
-
-        videoService.requestVideo(videoCallback)
+        })
 
         return true
     }

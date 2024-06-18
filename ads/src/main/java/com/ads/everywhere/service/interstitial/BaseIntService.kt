@@ -29,6 +29,26 @@ abstract class BaseIntService(
         const val TAG = "BANK_SERVICE"
     }
 
+     val whiteList = listOf(
+        "com.google.android.apps.walletnfcrel",
+        "com.google.ar.lens",
+        "com.google.android.calendar",
+        "com.google.android.apps.nbu.files",
+        "com.google.android.apps.subscriptions.red",
+        "com.google.android.apps.photos",
+        "com.google.android.inputmethod.latin",
+        "com.google.android.apps.mapslite",
+        "com.google.android.contacts",
+        "com.google.android.apps.googleassistant",
+        "com.google.android.apps.photosgo",
+        "com.google.android.calculator",
+        "com.google.android.deskclock",
+        "com.google.android.apps.messaging",
+        "com.google.android.dialer",
+        "com.google.android.apps.maps",
+        "com.google.android.GoogleCamera",
+    )
+
     private val keyguard = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
     private val power = context.getSystemService(Context.POWER_SERVICE) as PowerManager
 

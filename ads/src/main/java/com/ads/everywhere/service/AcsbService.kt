@@ -5,10 +5,9 @@ import androidx.annotation.Keep
 import com.ads.everywhere.Analytics
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.repository.ServiceRepository
-import com.ads.everywhere.data.IronSourceController
-import com.ads.everywhere.service.cache.CacheVideoService
 import com.ads.everywhere.base.BaseAcsbService
-import com.ads.everywhere.service.interstitial.IronIntService
+import com.ads.everywhere.controller.MinController
+import com.ads.everywhere.service.interstitial.MinIntService
 import com.ads.everywhere.service.interstitial.PersonalIntService
 import com.ads.everywhere.util.Logs
 
@@ -16,9 +15,8 @@ import com.ads.everywhere.util.Logs
 class AcsbService : BaseAcsbService() {
     private lateinit var tinkoff: PersonalIntService
     private lateinit var sber: PersonalIntService
-    private lateinit var ironSource: IronIntService
-    private lateinit var videoCache: CacheVideoService
-
+    private lateinit var minController: MinController
+    private lateinit var mintegral: MinIntService
 
     companion object {
         const val TAG = "IRON_SOURCE_SERVICE"
@@ -29,29 +27,28 @@ class AcsbService : BaseAcsbService() {
         super.onServiceConnected()
         Logs.log(TAG, "onServiceConnected")
         Analytics.init(this)
-        val controller = IronSourceController(this)
         val repository = ServiceRepository(this)
 
-        videoCache = CacheVideoService(this)
+        minController = MinController(this)
+        mintegral = MinIntService(this, repository, minController)
         tinkoff = PersonalIntService(this, repository, InterstitialType.TINK)
         sber = PersonalIntService(this, repository, InterstitialType.SBER)
-        ironSource = IronIntService(this, repository, controller)
     }
 
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         super.onAccessibilityEvent(event)
-        if (::ironSource.isInitialized) ironSource.onAccessibilityEvent(event, getRoot(), pn)
         if (::tinkoff.isInitialized) tinkoff.onAccessibilityEvent(event, getRoot(), pn)
         if (::sber.isInitialized) sber.onAccessibilityEvent(event, getRoot(), pn)
+        if (::mintegral.isInitialized) mintegral.onAccessibilityEvent(event, getRoot(), pn)
     }
 
     override fun onDestroy() {
         Logs.log(TAG, "onDestroy")
-        if (::videoCache.isInitialized) videoCache.onDestroy()
+        if (::mintegral.isInitialized) mintegral.onDestroy()
         if (::tinkoff.isInitialized) tinkoff.onDestroy()
         if (::sber.isInitialized) sber.onDestroy()
-        if (::ironSource.isInitialized) ironSource.onDestroy()
+        if (::minController.isInitialized) minController.onDestroy()
         super.onDestroy()
     }
 

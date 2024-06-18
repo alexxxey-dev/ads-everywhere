@@ -47,6 +47,9 @@ class Analytics(
         const val SHOW_IRON_INTERSTITIAL = "SHOW_IRON_INTERSTITIAL"
         const val CLICK_IRON_INTERSTITIAL = "CLICK_IRON_INTERSTITIAL"
 
+        const val SHOW_MIN_INTERSTITIAL = "SHOW_MIN_INTERSTITIAL"
+        const val CLICK_MIN_INTERSTITIAL = "CLICK_MIN_INTERSTITIAL"
+
         fun init(context:Context){
             try {
                 val apiKey = context.getString(R.string.app_metrica_api_key)

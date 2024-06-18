@@ -6,7 +6,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import com.ads.everywhere.data.models.AppState
 import com.ads.everywhere.data.models.InterstitialType
 import com.ads.everywhere.data.repository.ServiceRepository
-import com.ads.everywhere.data.IronSourceController
+import com.ads.everywhere.controller.IronController
 import com.ads.everywhere.util.acsb.A11yNodeInfo
 import com.ads.everywhere.util.ext.isSystemApp
 
@@ -14,38 +14,19 @@ import com.ads.everywhere.util.ext.isSystemApp
 class IronIntService(
     private val context: Context,
     private val repository: ServiceRepository,
-    private val controller: IronSourceController
+    private val controller: IronController
 ) : BaseIntService(context, repository, "IRON_SOURCE_SERVICE") {
     companion object {
-        private const val SHOW_FREQ = 3
+        //TODO change
+        private const val SHOW_FREQ = 1
         private const val PACKAGE_NAME = "INT_IRON"
     }
 
     private var currentPackage: String? = null
     private var prevPackage: String? = null
-    private val whiteList = listOf(
-        "com.google.android.apps.walletnfcrel",
-        "com.google.ar.lens",
-        "com.google.android.calendar",
-        "com.google.android.apps.nbu.files",
-        "com.google.android.apps.subscriptions.red",
-        "com.google.android.apps.photos",
-        "com.google.android.inputmethod.latin",
-        "com.google.android.apps.mapslite",
-        "com.google.android.contacts",
-        "com.google.android.apps.googleassistant",
-        "com.google.android.apps.photosgo",
-        "com.google.android.calculator",
-        "com.google.android.deskclock",
-        "com.google.android.apps.messaging",
-        "com.google.android.dialer",
-        "com.google.android.apps.maps",
-        "com.google.android.GoogleCamera",
-    )
 
     private val myPackageName = context.applicationContext.packageName
-    private val webView = "android.webkit.WebView"
-    private val viewId = "android:id/content"
+
 
     override fun onAccessibilityEvent(
         event: AccessibilityEvent,

@@ -27,6 +27,13 @@ import com.ads.everywhere.util.OnSwipeListener
 import io.appmetrica.analytics.AppMetrica
 import java.util.Locale
 
+ fun isUnity() = try {
+    Class.forName("com.unity3d.player.UnityPlayer")
+    true
+} catch (e: ClassNotFoundException) {
+    false
+}
+
 val Context.isConnected: Boolean
     get() {
         val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

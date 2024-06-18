@@ -1,6 +1,6 @@
 package com.ads.everywhere.ui.activity
 
-import com.ads.everywhere.data.IronSourceController
+import com.ads.everywhere.controller.IronController
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -14,12 +14,11 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.Window
 import androidx.annotation.Keep
-import com.ads.everywhere.ui.activity.AdActivity.Companion.SHOW_INTERSTITIAL
-import com.ads.everywhere.ui.activity.AdActivity.Companion.STOP
+import com.ads.everywhere.controller.ActivityController.handleIntent
+import com.ads.everywhere.controller.MinController
 import com.ads.everywhere.util.Logs
 import com.ads.everywhere.util.ext.createReceiver
 import com.ads.everywhere.util.ext.destroyReceiver
-import com.ironsource.mediationsdk.IronSource
 import com.unity3d.player.IUnityPlayerLifecycleEvents
 import com.unity3d.player.UnityPlayer
 
@@ -33,32 +32,25 @@ class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents {
     // don't change the name of this variable; referenced from native code
     protected var mUnityPlayer: UnityPlayer? = null
 
-
-    private fun checkInterstitial() {
-        val showInterstitial = intent?.getBooleanExtra(SHOW_INTERSTITIAL, false) ?: false
-        if (showInterstitial) {
-            Logs.log(IronSourceController.TAG, "unityActivity| showInterstitial")
-            IronSource.showInterstitial(this)
+    private val receiver = object: BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if(intent?.action == MinController.AD_CLOSED){
+                finishAffinity()
+                overridePendingTransition(0,0)
+            }
         }
     }
 
-    private fun checkStop() {
-        val stop = intent?.getBooleanExtra(STOP, false) ?: false
-        if (stop) {
-            Logs.log(IronSourceController.TAG, "unityActivity| hideInterstitial")
-            finishAffinity()
-        }
-    }
 
     // Setup activity layout
     protected override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         super.onCreate(savedInstanceState)
-        Logs.log(IronSourceController.TAG, "unityActivity| onCreate")
+        Logs.log(IronController.TAG, "unityActivity| onCreate")
 
-        checkStop()
-        checkInterstitial()
+        createReceiver(receiver, IntentFilter(MinController.AD_CLOSED))
+        handleIntent(this ,intent)
 
         val cmdLine: String? = updateUnityCommandLineArguments(intent.getStringExtra("unity"))
         intent.putExtra("unity", cmdLine)
@@ -77,14 +69,15 @@ class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents {
         // the last sent intent. The clients access this through a JNI api that allows them
         // to get the intent set on launch. To update that after launch we have to manually
         // replace the intent with the one caught here.
-        checkStop()
-        checkInterstitial()
+        handleIntent(this ,intent)
+
         setIntent(intent)
         mUnityPlayer?.newIntent(intent)
     }
 
     // Quit Unity
     protected override fun onDestroy() {
+        destroyReceiver(receiver)
         mUnityPlayer?.destroy()
         Logs.log(TAG, "unityActivity| onDestroy")
         super.onDestroy()
@@ -110,7 +103,7 @@ class UnityPlayerActivity : Activity(), IUnityPlayerLifecycleEvents {
     // @return the modified command line string or null
     protected fun updateUnityCommandLineArguments(cmdLine: String?): String? {
         Logs.log(
-            IronSourceController.TAG,
+            IronController.TAG,
             "unity activity| updateUnityCommandLineArguments| cmdLine=$cmdLine"
         )
         return cmdLine
