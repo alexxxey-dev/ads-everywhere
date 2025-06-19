@@ -1,1 +1,1 @@
-Using accessibility service to show ads over system UI (AdWare)
+Using accessibility service to show ads over system UI 
